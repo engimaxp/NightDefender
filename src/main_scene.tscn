@@ -1,3 +1,166 @@
-[gd_scene format=3 uid="uid://b2bcuryropuen"]
+[gd_scene load_steps=26 format=3 uid="uid://b2bcuryropuen"]
+
+[ext_resource type="PackedScene" uid="uid://0v61a3p01rbs" path="res://src/character/bigguy.tscn" id="1_iu6fh"]
+[ext_resource type="PackedScene" uid="uid://c0wbxf0lqxnfc" path="res://src/character/mosquetto.tscn" id="2_ogrxj"]
+[ext_resource type="Script" path="res://src/CameraController.gd" id="3_4cc1u"]
+[ext_resource type="PackedScene" uid="uid://be5mypdlw7cpv" path="res://asset/model/furniture/bear.glb" id="4_2q4xm"]
+[ext_resource type="PackedScene" uid="uid://cu4hu1blytoem" path="res://asset/model/furniture/bedSingle.glb" id="5_nourv"]
+[ext_resource type="PackedScene" uid="uid://8bg0kpcos5mo" path="res://asset/model/furniture/bookcaseClosed.glb" id="6_vnt0p"]
+[ext_resource type="PackedScene" uid="uid://uura7oe30l66" path="res://asset/model/furniture/cabinetTelevision.glb" id="7_dkd17"]
+[ext_resource type="PackedScene" uid="uid://ddcwyunf2mqvv" path="res://asset/model/furniture/pottedPlant.glb" id="8_s11m4"]
+[ext_resource type="PackedScene" uid="uid://v1lp6nebk2cu" path="res://asset/model/furniture/plantSmall3.glb" id="9_n4wpm"]
+[ext_resource type="PackedScene" uid="uid://1yopdbn3c54d" path="res://asset/model/furniture/plantSmall2.glb" id="10_biqj4"]
+[ext_resource type="PackedScene" uid="uid://cfseirvw0au6u" path="res://asset/model/furniture/plantSmall1.glb" id="11_jd7p8"]
+[ext_resource type="PackedScene" uid="uid://dlgwqvena724s" path="res://asset/model/furniture/rugRound.glb" id="12_41jjp"]
+[ext_resource type="PackedScene" uid="uid://c53anjeoovp5m" path="res://asset/model/furniture/televisionModern.glb" id="13_7uli6"]
+[ext_resource type="PackedScene" uid="uid://cl0cdmtqw7rbv" path="res://asset/model/furniture/lampWall.glb" id="14_su7i3"]
+[ext_resource type="PackedScene" uid="uid://b0yxthi6wcc2l" path="res://asset/model/furniture/doorway.glb" id="15_gc2vx"]
+[ext_resource type="PackedScene" uid="uid://dojs471hfiuuu" path="res://asset/model/furniture/deskCorner.glb" id="16_s11tn"]
+[ext_resource type="PackedScene" uid="uid://c6ls3d1xq58hq" path="res://asset/model/furniture/computerScreen.glb" id="17_ukb3p"]
+[ext_resource type="PackedScene" uid="uid://codt0xov4h0iy" path="res://asset/model/furniture/chairDesk.glb" id="18_n15hn"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sqm8b"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_lyaci"]
+sky_material = SubResource("ProceduralSkyMaterial_sqm8b")
+
+[sub_resource type="Environment" id="Environment_knys7"]
+background_mode = 2
+sky = SubResource("Sky_lyaci")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_s2r8c"]
+size = Vector2(7, 7)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nqtxf"]
+albedo_color = Color(0.756863, 0.756863, 0.756863, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_f35my"]
+size = Vector2(7, 7)
+orientation = 0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_rdiqb"]
+size = Vector2(7, 7)
+orientation = 2
 
 [node name="MainScene" type="Node"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_knys7")
+
+[node name="Map" type="Node3D" parent="."]
+
+[node name="big" parent="Map" instance=ExtResource("1_iu6fh")]
+
+[node name="mosquetto" parent="Map" instance=ExtResource("2_ogrxj")]
+transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0.975729, 1.32663)
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Map"]
+layers = 7
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="Map/CSGCombiner3D"]
+transform = Transform3D(1, -5.90104e-05, 5.99117e-05, 5.90104e-05, 1, 6.24067e-05, -5.99117e-05, -6.24067e-05, 1, 0, 0, 0)
+mesh = SubResource("PlaneMesh_s2r8c")
+material = SubResource("StandardMaterial3D_nqtxf")
+
+[node name="CSGMesh3D6" type="CSGMesh3D" parent="Map/CSGCombiner3D"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, 4.1862, 0)
+mesh = SubResource("PlaneMesh_s2r8c")
+material = SubResource("StandardMaterial3D_nqtxf")
+
+[node name="CSGMesh3D2" type="CSGMesh3D" parent="Map/CSGCombiner3D"]
+transform = Transform3D(1, -5.90104e-05, 5.99117e-05, 5.90104e-05, 1, 6.24067e-05, -5.99117e-05, -6.24067e-05, 1, -3.42956, 2.84365, 0)
+mesh = SubResource("PlaneMesh_f35my")
+material = SubResource("StandardMaterial3D_nqtxf")
+
+[node name="CSGMesh3D3" type="CSGMesh3D" parent="Map/CSGCombiner3D"]
+transform = Transform3D(1, -5.90104e-05, 5.99117e-05, 5.90104e-05, 1, 6.24067e-05, -5.99117e-05, -6.24067e-05, 1, 0.0762005, 2.84365, -3.46042)
+mesh = SubResource("PlaneMesh_rdiqb")
+material = SubResource("StandardMaterial3D_nqtxf")
+
+[node name="CSGMesh3D4" type="CSGMesh3D" parent="Map/CSGCombiner3D"]
+transform = Transform3D(-1, 5.90104e-05, -5.99992e-05, 5.90104e-05, 1, 6.24067e-05, 5.99992e-05, 6.24067e-05, -1, 3.48018, 2.84365, -0.112314)
+mesh = SubResource("PlaneMesh_f35my")
+material = SubResource("StandardMaterial3D_nqtxf")
+
+[node name="CSGMesh3D5" type="CSGMesh3D" parent="Map/CSGCombiner3D"]
+transform = Transform3D(-1, 5.90104e-05, -5.99992e-05, 5.90104e-05, 1, 6.24067e-05, 5.99992e-05, 6.24067e-05, -1, -0.0255835, 2.84365, 3.34811)
+mesh = SubResource("PlaneMesh_rdiqb")
+material = SubResource("StandardMaterial3D_nqtxf")
+
+[node name="CameraController" type="Node3D" parent="Map"]
+script = ExtResource("3_4cc1u")
+player_node_path = NodePath("../mosquetto")
+close_camera_distance = 0.01
+initial_camera_distance = 0.01
+
+[node name="SpringArm3D" type="SpringArm3D" parent="Map/CameraController"]
+
+[node name="Camera3D" type="Camera3D" parent="Map/CameraController/SpringArm3D"]
+current = true
+near = 0.001
+
+[node name="Furniture" type="Node3D" parent="Map"]
+
+[node name="bear" parent="Map/Furniture" instance=ExtResource("4_2q4xm")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 1.18114, 2, -2.85119)
+
+[node name="bedSingle" parent="Map/Furniture" instance=ExtResource("5_nourv")]
+transform = Transform3D(-1.09278e-07, 0, 2.5, 0, 2.5, 0, -2.5, 0, -1.09278e-07, -0.626204, -0.00687909, -0.987104)
+
+[node name="bookcaseClosed" parent="Map/Furniture" instance=ExtResource("6_vnt0p")]
+transform = Transform3D(-1.31134e-07, 0, 3, 0, 3, 0, -3, 0, -1.31134e-07, -2.67844, 0, 1.21707)
+
+[node name="cabinetTelevision" parent="Map/Furniture" instance=ExtResource("7_dkd17")]
+transform = Transform3D(-1.09278e-07, 0, -2.5, 0, 2.5, 0, 2.5, 0, -1.09278e-07, 2.76402, 0, -3.4307)
+
+[node name="pottedPlant" parent="Map/Furniture" instance=ExtResource("8_s11m4")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -3.11251, -4.76837e-07, 1.73746)
+
+[node name="plantSmall3" parent="Map/Furniture" instance=ExtResource("9_n4wpm")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 2.88859, 0.787741, -1.58491)
+
+[node name="plantSmall2" parent="Map/Furniture" instance=ExtResource("10_biqj4")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 2.95772, 0.972332, 2.54325)
+
+[node name="plantSmall1" parent="Map/Furniture" instance=ExtResource("11_jd7p8")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -3.24342, 2.55442, 0.576649)
+
+[node name="rugRound" parent="Map/Furniture" instance=ExtResource("12_41jjp")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -0.0793209, 0, -0.924277)
+
+[node name="televisionModern" parent="Map/Furniture" instance=ExtResource("13_7uli6")]
+transform = Transform3D(-1.09278e-07, 0, -2.5, 0, 2.5, 0, 2.5, 0, -1.09278e-07, 3.19386, 0.750678, -2.51615)
+
+[node name="lampWall" parent="Map/Furniture" instance=ExtResource("14_su7i3")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -1, 2.63983, 3.03904)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Map/Furniture/lampWall"]
+light_bake_mode = 1
+shadow_enabled = true
+omni_range = 10.0
+omni_attenuation = 0.450625
+
+[node name="lampWall2" parent="Map/Furniture" instance=ExtResource("14_su7i3")]
+transform = Transform3D(-2.5, 0, -2.18557e-07, 0, 2.5, 0, 2.18557e-07, 0, -2.5, -1, 2.63983, -3.16485)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Map/Furniture/lampWall2"]
+light_bake_mode = 1
+shadow_enabled = true
+omni_range = 10.0
+omni_attenuation = 0.450625
+
+[node name="doorway" parent="Map/Furniture" instance=ExtResource("15_gc2vx")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -0.669706, 0, 3.46552)
+
+[node name="deskCorner" parent="Map/Furniture" instance=ExtResource("16_s11tn")]
+transform = Transform3D(-1.09278e-07, 0, -2.5, 0, 2.5, 0, 2.5, 0, -1.09278e-07, 1.12806, 0, 0.655431)
+
+[node name="computerScreen" parent="Map/Furniture" instance=ExtResource("17_ukb3p")]
+transform = Transform3D(-2.5, 0, -2.18557e-07, 0, 2.5, 0, 2.18557e-07, 0, -2.5, 2.51656, 0.977139, 2.41164)
+
+[node name="chairDesk" parent="Map/Furniture" instance=ExtResource("18_n15hn")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 1.56631, 0, 1.85791)

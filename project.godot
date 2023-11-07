@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="GameOffScale"
+run/main_scene="res://src/main_scene.tscn"
 config/features=PackedStringArray("4.1", "Mobile")
 config/icon="res://icon.svg"
 
@@ -32,6 +33,12 @@ gdscript/warnings/unused_signal=0
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/ColorPreview/plugin.cfg", "res://addons/debug_menu/plugin.cfg", "res://addons/panku_console/plugin.cfg")
+
+[layer_names]
+
+3d_physics/layer_1="Env"
+3d_physics/layer_2="BigGuy"
+3d_physics/layer_3="Mosquetto"
 
 [rendering]
 
