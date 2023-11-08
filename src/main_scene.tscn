@@ -1,8 +1,7 @@
-[gd_scene load_steps=26 format=3 uid="uid://b2bcuryropuen"]
+[gd_scene load_steps=25 format=3 uid="uid://b2bcuryropuen"]
 
 [ext_resource type="PackedScene" uid="uid://0v61a3p01rbs" path="res://src/character/bigguy.tscn" id="1_iu6fh"]
 [ext_resource type="PackedScene" uid="uid://c0wbxf0lqxnfc" path="res://src/character/mosquetto.tscn" id="2_ogrxj"]
-[ext_resource type="Script" path="res://src/CameraController.gd" id="3_4cc1u"]
 [ext_resource type="PackedScene" uid="uid://be5mypdlw7cpv" path="res://asset/model/furniture/bear.glb" id="4_2q4xm"]
 [ext_resource type="PackedScene" uid="uid://cu4hu1blytoem" path="res://asset/model/furniture/bedSingle.glb" id="5_nourv"]
 [ext_resource type="PackedScene" uid="uid://8bg0kpcos5mo" path="res://asset/model/furniture/bookcaseClosed.glb" id="6_vnt0p"]
@@ -29,6 +28,9 @@ sky_material = SubResource("ProceduralSkyMaterial_sqm8b")
 [sub_resource type="Environment" id="Environment_knys7"]
 background_mode = 2
 sky = SubResource("Sky_lyaci")
+ambient_light_color = Color(0.2, 0.2, 0.2, 1)
+ambient_light_sky_contribution = 0.08
+ambient_light_energy = 0.1
 tonemap_mode = 2
 glow_enabled = true
 
@@ -54,12 +56,15 @@ environment = SubResource("Environment_knys7")
 [node name="Map" type="Node3D" parent="."]
 
 [node name="big" parent="Map" instance=ExtResource("1_iu6fh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0134258, 0)
 
 [node name="mosquetto" parent="Map" instance=ExtResource("2_ogrxj")]
-transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0.975729, 1.32663)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.97573, -2.67337)
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="Map"]
-layers = 7
+use_collision = true
+collision_layer = 7
+collision_mask = 7
 
 [node name="CSGMesh3D" type="CSGMesh3D" parent="Map/CSGCombiner3D"]
 transform = Transform3D(1, -5.90104e-05, 5.99117e-05, 5.90104e-05, 1, 6.24067e-05, -5.99117e-05, -6.24067e-05, 1, 0, 0, 0)
@@ -90,18 +95,6 @@ material = SubResource("StandardMaterial3D_nqtxf")
 transform = Transform3D(-1, 5.90104e-05, -5.99992e-05, 5.90104e-05, 1, 6.24067e-05, 5.99992e-05, 6.24067e-05, -1, -0.0255835, 2.84365, 3.34811)
 mesh = SubResource("PlaneMesh_rdiqb")
 material = SubResource("StandardMaterial3D_nqtxf")
-
-[node name="CameraController" type="Node3D" parent="Map"]
-script = ExtResource("3_4cc1u")
-player_node_path = NodePath("../mosquetto")
-close_camera_distance = 0.01
-initial_camera_distance = 0.01
-
-[node name="SpringArm3D" type="SpringArm3D" parent="Map/CameraController"]
-
-[node name="Camera3D" type="Camera3D" parent="Map/CameraController/SpringArm3D"]
-current = true
-near = 0.001
 
 [node name="Furniture" type="Node3D" parent="Map"]
 
@@ -139,6 +132,8 @@ transform = Transform3D(-1.09278e-07, 0, -2.5, 0, 2.5, 0, 2.5, 0, -1.09278e-07, 
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -1, 2.63983, 3.03904)
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Map/Furniture/lampWall"]
+visible = false
+layers = 7
 light_bake_mode = 1
 shadow_enabled = true
 omni_range = 10.0
@@ -148,9 +143,10 @@ omni_attenuation = 0.450625
 transform = Transform3D(-2.5, 0, -2.18557e-07, 0, 2.5, 0, 2.18557e-07, 0, -2.5, -1, 2.63983, -3.16485)
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Map/Furniture/lampWall2"]
+layers = 7
 light_bake_mode = 1
 shadow_enabled = true
-omni_range = 10.0
+omni_range = 3.355
 omni_attenuation = 0.450625
 
 [node name="doorway" parent="Map/Furniture" instance=ExtResource("15_gc2vx")]
