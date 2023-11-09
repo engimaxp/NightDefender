@@ -2,8 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://0v61a3p01rbs" path="res://src/character/bigguy.tscn" id="1_iu6fh"]
 [ext_resource type="PackedScene" uid="uid://c0wbxf0lqxnfc" path="res://src/character/mosquetto.tscn" id="2_ogrxj"]
-[ext_resource type="PackedScene" uid="uid://be5mypdlw7cpv" path="res://asset/model/furniture/bear.glb" id="4_2q4xm"]
-[ext_resource type="PackedScene" uid="uid://cu4hu1blytoem" path="res://asset/model/furniture/bedSingle.glb" id="5_nourv"]
+[ext_resource type="PackedScene" uid="uid://1dc7plspbgg6" path="res://src/furniture/bear.tscn" id="3_3krvm"]
+[ext_resource type="PackedScene" uid="uid://co43njpavqant" path="res://src/furniture/bed_single.tscn" id="4_xr3yr"]
 [ext_resource type="PackedScene" uid="uid://8bg0kpcos5mo" path="res://asset/model/furniture/bookcaseClosed.glb" id="6_vnt0p"]
 [ext_resource type="PackedScene" uid="uid://uura7oe30l66" path="res://asset/model/furniture/cabinetTelevision.glb" id="7_dkd17"]
 [ext_resource type="PackedScene" uid="uid://ddcwyunf2mqvv" path="res://asset/model/furniture/pottedPlant.glb" id="8_s11m4"]
@@ -14,8 +14,8 @@
 [ext_resource type="PackedScene" uid="uid://c53anjeoovp5m" path="res://asset/model/furniture/televisionModern.glb" id="13_7uli6"]
 [ext_resource type="PackedScene" uid="uid://cl0cdmtqw7rbv" path="res://asset/model/furniture/lampWall.glb" id="14_su7i3"]
 [ext_resource type="PackedScene" uid="uid://b0yxthi6wcc2l" path="res://asset/model/furniture/doorway.glb" id="15_gc2vx"]
+[ext_resource type="PackedScene" uid="uid://d2fjvcliy8dgd" path="res://src/furniture/computer_screen.tscn" id="16_ks7p4"]
 [ext_resource type="PackedScene" uid="uid://dojs471hfiuuu" path="res://asset/model/furniture/deskCorner.glb" id="16_s11tn"]
-[ext_resource type="PackedScene" uid="uid://c6ls3d1xq58hq" path="res://asset/model/furniture/computerScreen.glb" id="17_ukb3p"]
 [ext_resource type="PackedScene" uid="uid://codt0xov4h0iy" path="res://asset/model/furniture/chairDesk.glb" id="18_n15hn"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sqm8b"]
@@ -59,7 +59,7 @@ environment = SubResource("Environment_knys7")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0134258, 0)
 
 [node name="mosquetto" parent="Map" instance=ExtResource("2_ogrxj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.97573, -2.67337)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.16757, 0.749375, -1.34146)
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="Map"]
 use_collision = true
@@ -98,10 +98,12 @@ material = SubResource("StandardMaterial3D_nqtxf")
 
 [node name="Furniture" type="Node3D" parent="Map"]
 
-[node name="bear" parent="Map/Furniture" instance=ExtResource("4_2q4xm")]
+[node name="bear" parent="Map/Furniture" instance=ExtResource("3_3krvm")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 1.18114, 2, -2.85119)
+collision_layer = 7
+collision_mask = 7
 
-[node name="bedSingle" parent="Map/Furniture" instance=ExtResource("5_nourv")]
+[node name="bedSingle" parent="Map/Furniture" instance=ExtResource("4_xr3yr")]
 transform = Transform3D(-1.09278e-07, 0, 2.5, 0, 2.5, 0, -2.5, 0, -1.09278e-07, -0.626204, -0.00687909, -0.987104)
 
 [node name="bookcaseClosed" parent="Map/Furniture" instance=ExtResource("6_vnt0p")]
@@ -155,7 +157,7 @@ transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -0.669706, 0, 3.46552)
 [node name="deskCorner" parent="Map/Furniture" instance=ExtResource("16_s11tn")]
 transform = Transform3D(-1.09278e-07, 0, -2.5, 0, 2.5, 0, 2.5, 0, -1.09278e-07, 1.12806, 0, 0.655431)
 
-[node name="computerScreen" parent="Map/Furniture" instance=ExtResource("17_ukb3p")]
+[node name="computerScreen" parent="Map/Furniture" instance=ExtResource("16_ks7p4")]
 transform = Transform3D(-2.5, 0, -2.18557e-07, 0, 2.5, 0, 2.18557e-07, 0, -2.5, 2.51656, 0.977139, 2.41164)
 
 [node name="chairDesk" parent="Map/Furniture" instance=ExtResource("18_n15hn")]
