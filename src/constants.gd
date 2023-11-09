@@ -1,0 +1,3 @@
+extends Node
+
+enum BIGGUY_STATE {SLEEP,WAKEUP,IDLE}

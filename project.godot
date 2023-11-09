@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="GameOffScale"
-run/main_scene="res://asset/model/flashlight.glb"
+run/main_scene="res://src/main_scene.tscn"
 config/features=PackedStringArray("4.1", "Mobile")
 boot_splash/show_image=false
 config/icon="res://icon.svg"
@@ -20,6 +20,9 @@ config/icon="res://icon.svg"
 
 DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
 Panku="*res://addons/panku_console/console.tscn"
+BeehaveGlobalMetrics="*res://addons/beehave/metrics/beehave_global_metrics.gd"
+BeehaveGlobalDebugger="*res://addons/beehave/debug/global_debugger.gd"
+Constants="*res://src/constants.gd"
 
 [debug]
 
@@ -33,7 +36,7 @@ gdscript/warnings/unused_signal=0
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/ColorPreview/plugin.cfg", "res://addons/debug_menu/plugin.cfg", "res://addons/panku_console/plugin.cfg")
+enabled=PackedStringArray("res://addons/ColorPreview/plugin.cfg", "res://addons/beehave/plugin.cfg", "res://addons/debug_menu/plugin.cfg", "res://addons/gdUnit4/plugin.cfg", "res://addons/panku_console/plugin.cfg")
 
 [input]
 

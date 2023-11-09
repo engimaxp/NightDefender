@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://b2bcuryropuen"]
+[gd_scene load_steps=26 format=3 uid="uid://b2bcuryropuen"]
 
 [ext_resource type="PackedScene" uid="uid://0v61a3p01rbs" path="res://src/character/bigguy.tscn" id="1_iu6fh"]
 [ext_resource type="PackedScene" uid="uid://c0wbxf0lqxnfc" path="res://src/character/mosquetto.tscn" id="2_ogrxj"]
@@ -34,6 +34,14 @@ ambient_light_energy = 0.1
 tonemap_mode = 2
 glow_enabled = true
 
+[sub_resource type="NavigationMesh" id="NavigationMesh_mvxue"]
+vertices = PackedVector3Array(-2.27579, 1.09343, -2.86253, -2.27579, 1.09343, -2.36253, -1.02579, 1.09343, -2.36253, -1.02579, 1.09343, -2.86253, -2.77579, 0.343432, -1.36253, -2.77579, 0.343432, -0.612533, -2.02579, 0.343432, -0.362533, -0.27579, 0.343432, -1.36253, 2.97421, 0.343432, 0.137467, 2.97421, 0.343432, -0.862533, 2.22421, 0.343432, -1.11253, 0.97421, 0.343432, 0.637467, 2.22421, 0.343432, -1.11253, 2.22421, 0.343432, -2.86253, -0.02579, 0.343432, -2.86253, -0.27579, 0.343432, -1.36253, 0.97421, 0.343432, 0.637467, -2.02579, 0.343432, -0.362533, -2.02579, 0.343432, 1.63747, 0.47421, 0.343432, 2.63747, 0.97421, 0.343432, 0.637467, -0.27579, 0.343432, -1.36253, -2.02579, 0.343432, 1.63747, -2.52579, 0.343432, 2.63747, 0.47421, 0.343432, 2.63747)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1), PackedInt32Array(5, 4, 6), PackedInt32Array(6, 4, 7), PackedInt32Array(9, 8, 10), PackedInt32Array(10, 8, 11), PackedInt32Array(14, 13, 15), PackedInt32Array(15, 13, 12), PackedInt32Array(15, 12, 16), PackedInt32Array(17, 21, 18), PackedInt32Array(18, 21, 20), PackedInt32Array(18, 20, 19), PackedInt32Array(24, 23, 22)]
+geometry_parsed_geometry_type = 2
+geometry_collision_mask = 4294901761
+agent_max_climb = 0.1
+agent_max_slope = 0.02
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_s2r8c"]
 size = Vector2(7, 7)
 
@@ -61,79 +69,82 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0134258, 0)
 [node name="mosquetto" parent="Map" instance=ExtResource("2_ogrxj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.16757, 0.749375, -1.34146)
 
-[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Map"]
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="Map"]
+navigation_mesh = SubResource("NavigationMesh_mvxue")
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Map/NavigationRegion3D"]
 use_collision = true
 collision_layer = 7
 collision_mask = 7
 
-[node name="CSGMesh3D" type="CSGMesh3D" parent="Map/CSGCombiner3D"]
+[node name="CSGMesh3D" type="CSGMesh3D" parent="Map/NavigationRegion3D/CSGCombiner3D"]
 transform = Transform3D(1, -5.90104e-05, 5.99117e-05, 5.90104e-05, 1, 6.24067e-05, -5.99117e-05, -6.24067e-05, 1, 0, 0, 0)
 mesh = SubResource("PlaneMesh_s2r8c")
 material = SubResource("StandardMaterial3D_nqtxf")
 
-[node name="CSGMesh3D6" type="CSGMesh3D" parent="Map/CSGCombiner3D"]
+[node name="CSGMesh3D6" type="CSGMesh3D" parent="Map/NavigationRegion3D/CSGCombiner3D"]
 transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, 4.1862, 0)
 mesh = SubResource("PlaneMesh_s2r8c")
 material = SubResource("StandardMaterial3D_nqtxf")
 
-[node name="CSGMesh3D2" type="CSGMesh3D" parent="Map/CSGCombiner3D"]
+[node name="CSGMesh3D2" type="CSGMesh3D" parent="Map/NavigationRegion3D/CSGCombiner3D"]
 transform = Transform3D(1, -5.90104e-05, 5.99117e-05, 5.90104e-05, 1, 6.24067e-05, -5.99117e-05, -6.24067e-05, 1, -3.42956, 2.84365, 0)
 mesh = SubResource("PlaneMesh_f35my")
 material = SubResource("StandardMaterial3D_nqtxf")
 
-[node name="CSGMesh3D3" type="CSGMesh3D" parent="Map/CSGCombiner3D"]
+[node name="CSGMesh3D3" type="CSGMesh3D" parent="Map/NavigationRegion3D/CSGCombiner3D"]
 transform = Transform3D(1, -5.90104e-05, 5.99117e-05, 5.90104e-05, 1, 6.24067e-05, -5.99117e-05, -6.24067e-05, 1, 0.0762005, 2.84365, -3.46042)
 mesh = SubResource("PlaneMesh_rdiqb")
 material = SubResource("StandardMaterial3D_nqtxf")
 
-[node name="CSGMesh3D4" type="CSGMesh3D" parent="Map/CSGCombiner3D"]
+[node name="CSGMesh3D4" type="CSGMesh3D" parent="Map/NavigationRegion3D/CSGCombiner3D"]
 transform = Transform3D(-1, 5.90104e-05, -5.99992e-05, 5.90104e-05, 1, 6.24067e-05, 5.99992e-05, 6.24067e-05, -1, 3.48018, 2.84365, -0.112314)
 mesh = SubResource("PlaneMesh_f35my")
 material = SubResource("StandardMaterial3D_nqtxf")
 
-[node name="CSGMesh3D5" type="CSGMesh3D" parent="Map/CSGCombiner3D"]
+[node name="CSGMesh3D5" type="CSGMesh3D" parent="Map/NavigationRegion3D/CSGCombiner3D"]
 transform = Transform3D(-1, 5.90104e-05, -5.99992e-05, 5.90104e-05, 1, 6.24067e-05, 5.99992e-05, 6.24067e-05, -1, -0.0255835, 2.84365, 3.34811)
 mesh = SubResource("PlaneMesh_rdiqb")
 material = SubResource("StandardMaterial3D_nqtxf")
 
-[node name="Furniture" type="Node3D" parent="Map"]
+[node name="Furniture" type="Node3D" parent="Map/NavigationRegion3D"]
 
-[node name="bear" parent="Map/Furniture" instance=ExtResource("3_3krvm")]
+[node name="bear" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("3_3krvm")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 1.18114, 2, -2.85119)
 collision_layer = 7
 collision_mask = 7
 
-[node name="bedSingle" parent="Map/Furniture" instance=ExtResource("4_xr3yr")]
+[node name="bedSingle" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("4_xr3yr")]
 transform = Transform3D(-1.09278e-07, 0, 2.5, 0, 2.5, 0, -2.5, 0, -1.09278e-07, -0.626204, -0.00687909, -0.987104)
 
-[node name="bookcaseClosed" parent="Map/Furniture" instance=ExtResource("6_vnt0p")]
+[node name="bookcaseClosed" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("6_vnt0p")]
 transform = Transform3D(-1.31134e-07, 0, 3, 0, 3, 0, -3, 0, -1.31134e-07, -2.67844, 0, 1.21707)
 
-[node name="cabinetTelevision" parent="Map/Furniture" instance=ExtResource("7_dkd17")]
+[node name="cabinetTelevision" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("7_dkd17")]
 transform = Transform3D(-1.09278e-07, 0, -2.5, 0, 2.5, 0, 2.5, 0, -1.09278e-07, 2.76402, 0, -3.4307)
 
-[node name="pottedPlant" parent="Map/Furniture" instance=ExtResource("8_s11m4")]
+[node name="pottedPlant" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("8_s11m4")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -3.11251, -4.76837e-07, 1.73746)
 
-[node name="plantSmall3" parent="Map/Furniture" instance=ExtResource("9_n4wpm")]
+[node name="plantSmall3" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("9_n4wpm")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 2.88859, 0.787741, -1.58491)
 
-[node name="plantSmall2" parent="Map/Furniture" instance=ExtResource("10_biqj4")]
+[node name="plantSmall2" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("10_biqj4")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 2.95772, 0.972332, 2.54325)
 
-[node name="plantSmall1" parent="Map/Furniture" instance=ExtResource("11_jd7p8")]
+[node name="plantSmall1" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("11_jd7p8")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -3.24342, 2.55442, 0.576649)
 
-[node name="rugRound" parent="Map/Furniture" instance=ExtResource("12_41jjp")]
+[node name="rugRound" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("12_41jjp")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -0.0793209, 0, -0.924277)
 
-[node name="televisionModern" parent="Map/Furniture" instance=ExtResource("13_7uli6")]
+[node name="televisionModern" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("13_7uli6")]
 transform = Transform3D(-1.09278e-07, 0, -2.5, 0, 2.5, 0, 2.5, 0, -1.09278e-07, 3.19386, 0.750678, -2.51615)
 
-[node name="lampWall" parent="Map/Furniture" instance=ExtResource("14_su7i3")]
+[node name="lampWall" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("14_su7i3")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -1, 2.63983, 3.03904)
 
-[node name="OmniLight3D" type="OmniLight3D" parent="Map/Furniture/lampWall"]
+[node name="OmniLight3D" type="OmniLight3D" parent="Map/NavigationRegion3D/Furniture/lampWall"]
 visible = false
 layers = 7
 light_bake_mode = 1
@@ -141,24 +152,24 @@ shadow_enabled = true
 omni_range = 10.0
 omni_attenuation = 0.450625
 
-[node name="lampWall2" parent="Map/Furniture" instance=ExtResource("14_su7i3")]
+[node name="lampWall2" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("14_su7i3")]
 transform = Transform3D(-2.5, 0, -2.18557e-07, 0, 2.5, 0, 2.18557e-07, 0, -2.5, -1, 2.63983, -3.16485)
 
-[node name="OmniLight3D" type="OmniLight3D" parent="Map/Furniture/lampWall2"]
+[node name="OmniLight3D" type="OmniLight3D" parent="Map/NavigationRegion3D/Furniture/lampWall2"]
 layers = 7
 light_bake_mode = 1
 shadow_enabled = true
 omni_range = 3.355
 omni_attenuation = 0.450625
 
-[node name="doorway" parent="Map/Furniture" instance=ExtResource("15_gc2vx")]
+[node name="doorway" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("15_gc2vx")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -0.669706, 0, 3.46552)
 
-[node name="deskCorner" parent="Map/Furniture" instance=ExtResource("16_s11tn")]
+[node name="deskCorner" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("16_s11tn")]
 transform = Transform3D(-1.09278e-07, 0, -2.5, 0, 2.5, 0, 2.5, 0, -1.09278e-07, 1.12806, 0, 0.655431)
 
-[node name="computerScreen" parent="Map/Furniture" instance=ExtResource("16_ks7p4")]
+[node name="computerScreen" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("16_ks7p4")]
 transform = Transform3D(-2.5, 0, -2.18557e-07, 0, 2.5, 0, 2.18557e-07, 0, -2.5, 2.51656, 0.977139, 2.41164)
 
-[node name="chairDesk" parent="Map/Furniture" instance=ExtResource("18_n15hn")]
+[node name="chairDesk" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("18_n15hn")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 1.56631, 0, 1.85791)
