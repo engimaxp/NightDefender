@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="GameOffScale"
-run/main_scene="res://src/main_scene.tscn"
+run/main_scene="res://asset/model/flashlight.glb"
 config/features=PackedStringArray("4.1", "Mobile")
 boot_splash/show_image=false
 config/icon="res://icon.svg"
@@ -87,6 +87,7 @@ dive={
 3d_physics/layer_1="Env"
 3d_physics/layer_2="BigGuy"
 3d_physics/layer_3="Mosquetto"
+3d_physics/layer_4="bodypart"
 
 [rendering]
 
