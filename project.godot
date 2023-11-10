@@ -23,6 +23,7 @@ Panku="*res://addons/panku_console/console.tscn"
 BeehaveGlobalMetrics="*res://addons/beehave/metrics/beehave_global_metrics.gd"
 BeehaveGlobalDebugger="*res://addons/beehave/debug/global_debugger.gd"
 Constants="*res://src/constants.gd"
+Signals="*res://src/signals.gd"
 
 [debug]
 

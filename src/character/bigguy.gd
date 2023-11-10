@@ -1,18 +1,37 @@
 extends CharacterBody3D
+class_name BigGuy
 #@onready var pivot_point = $PivotPoint
 
 #func _process(delta):
 #	pivot_point.rotate_y(delta)
 var current_state:Constants.BIGGUY_STATE = Constants.BIGGUY_STATE.IDLE
+var is_ready_for_sleep = true
+var is_anoyed_by_player = false
+
+@onready var animation_player = $AnimationPlayer
+@onready var beehave_tree = $BeehaveTree
+
 @onready var animation_tree = $AnimationTree
+@onready var animation_state:AnimationNodeStateMachinePlayback\
+	 = animation_tree.get("parameters/playback") as AnimationNodeStateMachinePlayback
 @onready var navigation_agent_3d = $NavigationAgent3D
 @onready var debug_path = $NavigationAgent3D/debug_path
-var lerp_blend = 0.0
+@export var bed_position_node_path:NodePath
+@onready var bed_position_node = get_node(bed_position_node_path)
+@export var on_bed_position_node_path:NodePath
+@onready var on_bed_position_node = get_node(on_bed_position_node_path)
 
-func _ready():
-	pass
 
 var target_posiiton:Vector3
+
+var lerp_blend = 0.0
+signal arrive_destination
+
+func _ready():
+	navigation_agent_3d.navigation_finished.connect(_arrive)
+
+func _arrive():
+	arrive_destination.emit()
 
 func _process(delta):
 	if not navigation_agent_3d.is_navigation_finished():
@@ -28,10 +47,16 @@ func _process(delta):
 func _attack():
 	animation_tree.set("parameters/attack/request",true)
 
-func update_target_location(target):
+func _update_target_location(target):
 	navigation_agent_3d.target_position = target
 
+func go_to_bed():
+	_update_target_location(bed_position_node.global_position)
+
 func _unhandled_input(event):
+	if Input.is_action_just_pressed("ui_accept"):
+		beehave_tree.enabled = not beehave_tree.enabled
+	
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_MASK_RIGHT:
 		var camera = get_viewport().get_camera_3d() as Camera3D
 		var mouse_pos = get_viewport().get_mouse_position()
@@ -49,7 +74,7 @@ func _unhandled_input(event):
 #		print(result)
 		if !result.is_empty():
 			target_posiiton = result.position
-			update_target_location(result.position)
+			_update_target_location(result.position)
 				
 
 func _turn_to_position(p): 

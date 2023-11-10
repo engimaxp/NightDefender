@@ -63,8 +63,16 @@ environment = SubResource("Environment_knys7")
 
 [node name="Map" type="Node3D" parent="."]
 
+[node name="OnBedMark" type="Marker3D" parent="Map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.58567, 0.0118905, -3.12388)
+
+[node name="BedMark" type="Marker3D" parent="Map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.631013, 0, -3.27621)
+
 [node name="big" parent="Map" instance=ExtResource("1_iu6fh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0134258, 0)
+bed_position_node_path = NodePath("../BedMark")
+on_bed_position_node_path = NodePath("../OnBedMark")
 
 [node name="mosquetto" parent="Map" instance=ExtResource("2_ogrxj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.16757, 0.749375, -1.34146)
@@ -111,11 +119,13 @@ material = SubResource("StandardMaterial3D_nqtxf")
 
 [node name="bear" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("3_3krvm")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 1.18114, 2, -2.85119)
-collision_layer = 7
-collision_mask = 7
+collision_layer = 5
+collision_mask = 5
 
 [node name="bedSingle" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("4_xr3yr")]
 transform = Transform3D(-1.09278e-07, 0, 2.5, 0, 2.5, 0, -2.5, 0, -1.09278e-07, -0.626204, -0.00687909, -0.987104)
+collision_layer = 5
+collision_mask = 5
 
 [node name="bookcaseClosed" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("6_vnt0p")]
 transform = Transform3D(-1.31134e-07, 0, 3, 0, 3, 0, -3, 0, -1.31134e-07, -2.67844, 0, 1.21707)
@@ -170,6 +180,8 @@ transform = Transform3D(-1.09278e-07, 0, -2.5, 0, 2.5, 0, 2.5, 0, -1.09278e-07, 
 
 [node name="computerScreen" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("16_ks7p4")]
 transform = Transform3D(-2.5, 0, -2.18557e-07, 0, 2.5, 0, 2.18557e-07, 0, -2.5, 2.51656, 0.977139, 2.41164)
+collision_layer = 5
+collision_mask = 5
 
 [node name="chairDesk" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("18_n15hn")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 1.56631, 0, 1.85791)

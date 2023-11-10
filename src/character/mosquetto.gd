@@ -21,6 +21,7 @@ const MOSQUETTO_HOLOGRAM_SCENE = preload("res://src/character/mosquetto_hologram
 @onready var texture_rect := $TextureRect
 @onready var texture_rect_2 = $TextureRect2
 
+@export_flags_3d_physics var land_collision_mask = 9
 @onready var color_rect := $ColorRect
 @onready var light_level := $LightLevel
 @onready var light_detect_timer = $LightDetectTimer
@@ -39,7 +40,15 @@ var is_taking_of: = false
 var target_land_basis:Basis
 var target_land_position:Vector3
 
+
+func set_can_drink(is_can_drink):
+	ray_cast_3d.set_collision_mask_value(4,is_can_drink)
+	land_collision_mask = ray_cast_3d.collision_mask
+	
 func _ready() -> void:
+	set_can_drink(false)
+	Signals.bigguy_sleep.connect(set_can_drink.bind(true))
+	Signals.bigguy_awake.connect(set_can_drink.bind(false))
 	hologram = get_hologram()
 	hologram.hide()
 #	camera = get_viewport().get_camera_3d()
@@ -93,7 +102,7 @@ func _physics_process(delta: float) -> void:
 func detect_collide():
 	var space: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state as PhysicsDirectSpaceState3D
 	var params: = PhysicsShapeQueryParameters3D.new()
-	params.collision_mask = self.collision_mask
+	params.collision_mask = land_collision_mask
 	params.set_shape(shape)
 	params.transform = transform
 	params.transform.origin = self.global_position
@@ -105,7 +114,7 @@ func detect_collide():
 		var params2 = PhysicsRayQueryParameters3D.new()
 		params2.set_collide_with_bodies(true)
 		params2.set_collide_with_areas(false)
-		params2.collision_mask = self.collision_mask
+		params2.collision_mask = land_collision_mask
 		params2.from = self.global_position
 		params2.to = self.global_position + ray_intersect
 		var result = space.intersect_ray(params2)
@@ -121,7 +130,7 @@ func detect_collide():
 
 func get_normal_transform(p1:Vector3,pp:Vector3,pp2:Vector3): # p1 normal pp need rotated axis
 	var angle = pp.angle_to(p1)
-	if angle == 0 or pp2.cross(p1) == Vector3.ZERO:
+	if angle == 0 or pp.cross(p1) == Vector3.ZERO:
 		angle = pp2.angle_to(p1)
 		var p2 = pp2.cross(p1)
 		return Basis(p2.normalized(),angle)
@@ -134,26 +143,25 @@ func get_normal_transform(p1:Vector3,pp:Vector3,pp2:Vector3): # p1 normal pp nee
 
 func _process(delta: float) -> void:
 	# Mouse look
-	if not is_landing:
-		if mouse_delta != Vector2.ZERO:
-			camera.rotate_x(mouse_delta.y * LOOK_SENS * delta) # Rotate the camera around X axis using mouse delta
-			camera.rotation.x = clamp(camera.rotation.x, -PI / 2, PI / 2) # Clamp camera X rotation between -90 and 90 degrees
-			rotate((self.global_transform.basis * Vector3.UP).normalized(),-mouse_delta.x * LOOK_SENS * delta) # Rotate the player around Y axis using mouse delta
-	
+	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		if not is_landing:
+			if mouse_delta != Vector2.ZERO:
+				camera.rotate_x(mouse_delta.y * LOOK_SENS * delta) # Rotate the camera around X axis using mouse delta
+				camera.rotation.x = clamp(camera.rotation.x, -PI / 2, PI / 2) # Clamp camera X rotation between -90 and 90 degrees
+				rotate((self.global_transform.basis * Vector3.UP).normalized(),-mouse_delta.x * LOOK_SENS * delta) # Rotate the player around Y axis using mouse delta
+		else:
+			if self.global_transform.basis.is_equal_approx(target_land_basis) and \
+				self.global_position.is_equal_approx(target_land_position):
+				landed()
+			elif not self.global_transform.basis.is_equal_approx(target_land_basis):
+				self.global_transform.basis = Basis(self.global_transform.basis.get_rotation_quaternion().slerp(target_land_basis.get_rotation_quaternion(),delta*10))
+			elif not self.global_position.is_equal_approx(target_land_position):
+				self.global_position = lerp(self.global_position,target_land_position,delta*10)
 	
 	mouse_delta = Vector2.ZERO # Reset mouse delta so that only the last frame's relative motion is used
 	current_light_value = move_toward(target_light_value,target_light_value,delta)
 	light_level.tint_progress.a = current_light_value # Also tint the progress texture with the above
 	
-	
-	if is_landing:
-		if self.global_transform.basis.is_equal_approx(target_land_basis) and \
-			self.global_position.is_equal_approx(target_land_position):
-			landed()
-		elif not self.global_transform.basis.is_equal_approx(target_land_basis):
-			self.global_transform.basis = Basis(self.global_transform.basis.get_rotation_quaternion().slerp(target_land_basis.get_rotation_quaternion(),delta*10))
-		elif not self.global_position.is_equal_approx(target_land_position):
-			self.global_position = lerp(self.global_position,target_land_position,delta*10)
 func calculate_light():
 	# Light detection
 	light_detection.global_position = global_position # Make light detection follow the player
@@ -179,7 +187,13 @@ func _unhandled_input(event):
 			is_landing = true
 		elif is_landed:
 			take_of()
-
+	if Input.is_action_just_pressed("ui_cancel"):
+		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		elif Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	
+	
 func landed():
 	animation_tree.set("parameters/Transition/transition_request","close_wing")
 	await get_tree().create_timer(0.625,false).timeout
