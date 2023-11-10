@@ -37,14 +37,16 @@ func tick(actor: Node, _blackboard: Blackboard) -> int:
 			if anit.get("parameters/Transition/current_state") == "sleep":
 				a.current_state = Constants.BIGGUY_STATE.SLEEP
 				Signals.bigguy_sleep.emit()
-				clear_status()
+				clear_status(a)
 				return SUCCESS
 			else:
 				return RUNNING
 				
 func interrupt(actor: Node, blackboard: Blackboard) -> void:
-	clear_status()
+	clear_status(actor)
 		
-func clear_status():
+func clear_status(a):
+	if a.arrive_destination.is_connected(_arrive):
+		a.arrive_destination.disconnect(_arrive.bind(a))
 	is_arrive = false
 	is_start_go_to_bed = false

@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://b2bcuryropuen"]
+[gd_scene load_steps=27 format=3 uid="uid://b2bcuryropuen"]
 
 [ext_resource type="PackedScene" uid="uid://0v61a3p01rbs" path="res://src/character/bigguy.tscn" id="1_iu6fh"]
 [ext_resource type="PackedScene" uid="uid://c0wbxf0lqxnfc" path="res://src/character/mosquetto.tscn" id="2_ogrxj"]
@@ -33,6 +33,13 @@ ambient_light_sky_contribution = 0.08
 ambient_light_energy = 0.1
 tonemap_mode = 2
 glow_enabled = true
+
+[sub_resource type="Curve3D" id="Curve3D_jrf04"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0.0232893, 0, -2.78599, 0, 0, 0, 0, 0, 0, 2.04308, 0, -2.71536, 0, 0, 0, 0, 0, 0, 2.83405, 0, -0.850941, 0, 0, 0, 0, 0, 0, 1.40748, 0, 0.392009, 0, 0, 0, 0, 0, 0, 0.701261, 0, 1.45134, 0, 0, 0, 0, 0, 0, 0.263404, 0, 2.5248, 0, 0, 0, 0, 0, 0, -2.09537, 0, 2.53892, 0, 0, 0, 0, 0, 0, -1.89763, 0, 1.09823, 0, 0, 0, 0, 0, 0, -1.85526, 0, -0.582577, 0, 0, 0, 0, 0, 0, -2.70272, 0, -1.06281, 0, 0, 0, 0, 0, 0, -1.5304, 0, -1.26055, 0, 0, 0, 0, 0, 0, -0.569937, 0, 1.63496, 0, 0, 0, 0, 0, 0, 1.66172, 0, -0.794443, 0, 0, 0, 0, 0, 0, 0.136283, 0, -1.99502, 0, 0, 0, 0, 0, 0, -0.311161, 0, -0.504882),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 15
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_mvxue"]
 vertices = PackedVector3Array(-2.27579, 1.09343, -2.86253, -2.27579, 1.09343, -2.36253, -1.02579, 1.09343, -2.36253, -1.02579, 1.09343, -2.86253, -2.77579, 0.343432, -1.36253, -2.77579, 0.343432, -0.612533, -2.02579, 0.343432, -0.362533, -0.27579, 0.343432, -1.36253, 2.97421, 0.343432, 0.137467, 2.97421, 0.343432, -0.862533, 2.22421, 0.343432, -1.11253, 0.97421, 0.343432, 0.637467, 2.22421, 0.343432, -1.11253, 2.22421, 0.343432, -2.86253, -0.02579, 0.343432, -2.86253, -0.27579, 0.343432, -1.36253, 0.97421, 0.343432, 0.637467, -2.02579, 0.343432, -0.362533, -2.02579, 0.343432, 1.63747, 0.47421, 0.343432, 2.63747, 0.97421, 0.343432, 0.637467, -0.27579, 0.343432, -1.36253, -2.02579, 0.343432, 1.63747, -2.52579, 0.343432, 2.63747, 0.47421, 0.343432, 2.63747)
@@ -69,10 +76,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.58567, 0.0118905, -3.12388
 [node name="BedMark" type="Marker3D" parent="Map"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.631013, 0, -3.27621)
 
-[node name="big" parent="Map" instance=ExtResource("1_iu6fh")]
+[node name="Path3D" type="Path3D" parent="Map"]
+curve = SubResource("Curve3D_jrf04")
+
+[node name="big" parent="Map" node_paths=PackedStringArray("search_path") instance=ExtResource("1_iu6fh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0134258, 0)
 bed_position_node_path = NodePath("../BedMark")
 on_bed_position_node_path = NodePath("../OnBedMark")
+search_path = NodePath("../Path3D")
 
 [node name="mosquetto" parent="Map" instance=ExtResource("2_ogrxj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.16757, 0.749375, -1.34146)

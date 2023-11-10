@@ -49,7 +49,7 @@ func set_can_drink(is_can_drink):
 func _ready() -> void:
 	set_can_drink(false)
 	Signals.bigguy_sleep.connect(set_can_drink.bind(true))
-	Signals.bigguy_awake.connect(set_can_drink.bind(false))
+	Signals.bigguy_awake.connect(bigguy_awake)
 	hologram = get_hologram()
 	hologram.hide()
 #	camera = get_viewport().get_camera_3d()
@@ -58,7 +58,12 @@ func _ready() -> void:
 	# Make SubViewport render lighting only
 #	sub_viewport.debug_draw = 2
 #	sub_viewport_2.debug_draw = 2
-	light_detect_timer.timeout.connect(calculate_light)
+#	light_detect_timer.timeout.connect(calculate_light)
+
+func bigguy_awake():
+	set_can_drink(false)
+	if is_landed:
+		take_of()
 
 func _physics_process(delta: float) -> void:
 	if is_landing:
@@ -153,11 +158,13 @@ func drink_blood():
 	await get_tree().create_timer(1.6,false).timeout
 	
 func _process(delta: float) -> void:
+	calculate_light()
 	if is_drinking:
 		drink_time += delta
+		Signals.drink_blood_changed.emit(drink_time)
 	
 	# Mouse look
-	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and not is_drinking:
 		if not is_landing:
 			if mouse_delta != Vector2.ZERO:
 				camera.rotate_x(mouse_delta.y * LOOK_SENS * delta) # Rotate the camera around X axis using mouse delta
@@ -218,6 +225,7 @@ func landed():
 	is_landing = false
 	
 func take_of():
+	drink_time = 0
 	is_landed = false
 	is_taking_of = true
 	is_drinking = false

@@ -1,9 +1,6 @@
 extends CharacterBody3D
 class_name BigGuy
-#@onready var pivot_point = $PivotPoint
 
-#func _process(delta):
-#	pivot_point.rotate_y(delta)
 var current_state:Constants.BIGGUY_STATE = Constants.BIGGUY_STATE.IDLE
 var is_ready_for_sleep = true
 var is_anoyed_by_player = false
@@ -20,15 +17,27 @@ var is_anoyed_by_player = false
 @onready var bed_position_node = get_node(bed_position_node_path)
 @export var on_bed_position_node_path:NodePath
 @onready var on_bed_position_node = get_node(on_bed_position_node_path)
+@export var search_path:Path3D
 
-
+var attack_target_position:Vector3
+var search_target_position:Vector3
 var target_posiiton:Vector3
 
 var lerp_blend = 0.0
 signal arrive_destination
 
 func _ready():
+	if Constants.is_debug:
+		is_anoyed_by_player = true
+		is_ready_for_sleep = false
+	
+	Signals.drink_blood_changed.connect(drink_blood_changed)
 	navigation_agent_3d.navigation_finished.connect(_arrive)
+
+func drink_blood_changed(v):
+	if v > 5:
+		is_anoyed_by_player = true
+		Signals.bigguy_awake.emit()
 
 func _arrive():
 	arrive_destination.emit()
@@ -49,6 +58,9 @@ func _attack():
 
 func _update_target_location(target):
 	navigation_agent_3d.target_position = target
+
+func _clear_target_location():
+	navigation_agent_3d.target_position = Vector3.ZERO
 
 func go_to_bed():
 	_update_target_location(bed_position_node.global_position)
