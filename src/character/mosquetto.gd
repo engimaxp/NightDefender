@@ -36,6 +36,7 @@ var is_landable: = false
 var is_landed: = false
 var is_landing: = false
 var is_taking_of: = false
+var is_on_big_guy:= false
 
 var target_land_basis:Basis
 var target_land_position:Vector3
@@ -73,7 +74,8 @@ func _physics_process(delta: float) -> void:
 		else:
 			input_dir.y = 0
 		input_dir.x = 0
-	
+	if is_drinking:
+		input_dir = Vector2.ZERO
 	var y_input := Input.get_axis("dive","rise")
 	if is_landed:
 		y_input = 0
@@ -88,7 +90,7 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, spd)
 		velocity.z = move_toward(velocity.z, 0, spd)
 		velocity.y = move_toward(velocity.y, 0, spd)
-	if is_landed:
+	if is_landed and not is_drinking:
 		if input_dir != Vector2.ZERO:
 			if animation_tree.get("parameters/Transition/current_state") != "move":
 				animation_tree.set("parameters/Transition/transition_request","move")
@@ -124,6 +126,7 @@ func detect_collide():
 				result.position)
 			target_land_position = result.position
 			target_land_basis = hologram.global_transform.basis
+			is_on_big_guy = result.collider.is_in_group("big_guy_part")
 #			DebugDraw3D.draw_arrow_ray(result.position,result.normal,0.15,Color.REBECCA_PURPLE)
 #		DebugDraw3D.draw_sphere(collide_result[0],0.05,Color.WHITE)
 	hologram.visible = is_landable and not is_landed
@@ -141,7 +144,18 @@ func get_normal_transform(p1:Vector3,pp:Vector3,pp2:Vector3): # p1 normal pp nee
 #func _decide_another_point():
 #	Vector3.UP
 
+var is_drinking = false
+var drink_time = 0
+
+func drink_blood():
+	is_drinking = true
+	animation_tree.set("parameters/Transition/transition_request","drink")
+	await get_tree().create_timer(1.6,false).timeout
+	
 func _process(delta: float) -> void:
+	if is_drinking:
+		drink_time += delta
+	
 	# Mouse look
 	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		if not is_landing:
@@ -193,7 +207,10 @@ func _unhandled_input(event):
 		elif Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
-	
+	if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_MASK_LEFT:
+		if is_landed and is_on_big_guy:
+			drink_blood()
+		
 func landed():
 	animation_tree.set("parameters/Transition/transition_request","close_wing")
 	await get_tree().create_timer(0.625,false).timeout
@@ -203,6 +220,7 @@ func landed():
 func take_of():
 	is_landed = false
 	is_taking_of = true
+	is_drinking = false
 	animation_tree.set("parameters/Transition/transition_request","open_wing")
 	var tween = create_tween()
 	tween.tween_interval(1.0)

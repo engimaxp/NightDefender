@@ -54,8 +54,8 @@ func go_to_bed():
 	_update_target_location(bed_position_node.global_position)
 
 func _unhandled_input(event):
-	if Input.is_action_just_pressed("ui_accept"):
-		beehave_tree.enabled = not beehave_tree.enabled
+#	if Input.is_action_just_pressed("ui_accept"):
+#		beehave_tree.enabled = not beehave_tree.enabled
 	
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_MASK_RIGHT:
 		var camera = get_viewport().get_camera_3d() as Camera3D
