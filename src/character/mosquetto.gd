@@ -127,7 +127,7 @@ func detect_collide():
 		var result = space.intersect_ray(params2)
 		if result != null and not result.is_empty():
 			is_landable = true
-			hologram.transform = Transform3D(get_normal_transform(result.normal,Vector3.UP,Vector3.FORWARD),\
+			hologram.transform = Transform3D(get_normal_transform(result.normal,Vector3.UP),\
 				result.position)
 			target_land_position = result.position
 			target_land_basis = hologram.global_transform.basis
@@ -136,12 +136,10 @@ func detect_collide():
 #		DebugDraw3D.draw_sphere(collide_result[0],0.05,Color.WHITE)
 	hologram.visible = is_landable and not is_landed
 
-func get_normal_transform(p1:Vector3,pp:Vector3,pp2:Vector3): # p1 normal pp need rotated axis
+func get_normal_transform(p1:Vector3,pp:Vector3): # p1 normal pp need rotated axis
 	var angle = pp.angle_to(p1)
 	if angle == 0 or pp.cross(p1) == Vector3.ZERO:
-		angle = pp2.angle_to(p1)
-		var p2 = pp2.cross(p1)
-		return Basis(p2.normalized(),angle)
+		return Basis(pp.normalized(),0)
 	else:
 		var p2 = pp.cross(p1)
 		return Basis(p2.normalized(),angle)
@@ -198,7 +196,7 @@ func calculate_light():
 	light_level.value = max(color2.get_luminance(),color.get_luminance()) # Use the average color's brighness as the light level value
 #	light_level.value = color.get_luminance()
 	target_light_value = light_level.value
-	
+
 func _unhandled_input(event):
 	# Record relative mouse motion in mouse_delta
 	if event is InputEventMouseMotion:

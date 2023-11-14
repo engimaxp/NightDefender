@@ -15,13 +15,14 @@ func tick(actor: Node, _blackboard: Blackboard) -> int:
 		a._update_target_location(rp)
 	if is_arrive:
 		clear_status(a)
-		a._clear_target_location()
+#		a._clear_target_location()
 		return SUCCESS
 	else:
 		return RUNNING
 
 func arrive():
-	is_arrive = true
+	if is_start:
+		is_arrive = true
 				
 func interrupt(actor: Node, blackboard: Blackboard) -> void:
 	clear_status(actor)

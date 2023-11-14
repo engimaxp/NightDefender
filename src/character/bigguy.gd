@@ -19,6 +19,7 @@ var is_anoyed_by_player = false
 @onready var on_bed_position_node = get_node(on_bed_position_node_path)
 @export var search_path:Path3D
 
+@onready var flash_light = %flashLight
 var attack_target_position:Vector3
 var search_target_position:Vector3
 var target_posiiton:Vector3
@@ -27,10 +28,10 @@ var lerp_blend = 0.0
 signal arrive_destination
 
 func _ready():
+	flash_light.hide()
 	if Constants.is_debug:
 		is_anoyed_by_player = true
 		is_ready_for_sleep = false
-	
 	Signals.drink_blood_changed.connect(drink_blood_changed)
 	navigation_agent_3d.navigation_finished.connect(_arrive)
 
@@ -42,6 +43,19 @@ func drink_blood_changed(v):
 func _arrive():
 	arrive_destination.emit()
 
+func get_face_direction_points_for_flash_lights():
+	var direction = self.global_transform.basis * Vector3.BACK
+	var op = flash_light.global_position
+#	DebugDraw3D.draw_arrow_ray(flash_light.global_position,direction,0.5)
+	var r_count = 8
+	var rad_inc = 2.0 * PI / r_count
+	var r = self.global_transform.basis * Vector3.LEFT * 2.4
+	var points = []
+	for x in r_count:
+		var rp = (op + direction * 2.5) + r.rotated(direction.normalized(),x * rad_inc)
+		points.append(rp)
+	return points
+	
 func _process(delta):
 	if not navigation_agent_3d.is_navigation_finished():
 		var mesh:ImmediateMesh = debug_path.mesh as ImmediateMesh
@@ -50,9 +64,7 @@ func _process(delta):
 		for p in navigation_agent_3d.get_current_navigation_path():
 			mesh.surface_add_vertex(p)
 		mesh.surface_end()
-	if target_posiiton:
-		DebugDraw3D.draw_sphere(target_posiiton,0.3,Color.YELLOW)
-
+		
 func _attack():
 	animation_tree.set("parameters/attack/request",true)
 
@@ -66,8 +78,9 @@ func go_to_bed():
 	_update_target_location(bed_position_node.global_position)
 
 func _unhandled_input(event):
-#	if Input.is_action_just_pressed("ui_accept"):
-#		beehave_tree.enabled = not beehave_tree.enabled
+	if Input.is_action_just_pressed("ui_accept"):
+#		random_search_around()
+		beehave_tree.enabled = not beehave_tree.enabled
 	
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_MASK_RIGHT:
 		var camera = get_viewport().get_camera_3d() as Camera3D
@@ -105,8 +118,25 @@ func _turn_to_position(p):
 		tween.tween_property(self,"global_transform",nt,0.2)
 		await tween.finished
 	return
+@onready var head = $Armature_003/GeneralSkeleton/head
 
+func check_mosquetto_insight():
+	var mosquetto = get_tree().get_first_node_in_group("mosquetto")
+	var direction = mosquetto.global_position - head.global_position
+	var dir = global_transform.basis * Vector3.BACK
+	DebugDraw3D.draw_arrow_ray(head.global_position,direction,0.4,Color.WHITE)
+	DebugDraw3D.draw_arrow_ray(head.global_position,dir,0.4,Color.RED)
+	if direction.dot(dir) > 0.4:
+		if mosquetto.current_light_value > 0.7:
+			print("find target")
+			attack_target_position = mosquetto.global_position
+			search_target_position = attack_target_position
+	
 func _physics_process(delta):
+	if current_state == Constants.BIGGUY_STATE.IDLE \
+		and search_target_position == Vector3.ZERO:
+#		check_mosquetto_insight()
+		pass
 	var current_position = global_position
 	var next_position = current_position
 	var direction = Vector3.ZERO
@@ -126,3 +156,33 @@ func _physics_process(delta):
 	var currentRotation = global_transform.basis.get_rotation_quaternion()
 	velocity = ((currentRotation.normalized() * animation_tree.get_root_motion_position()) / delta)
 	move_and_slide()
+
+
+func random_search_around():
+	flash_light.show()
+#	await get_tree().create_timer(1.0,false).timeout
+	var bnt = self.global_transform.looking_at(Vector3.FORWARD.rotated(Vector3.UP,randf() * 2.0 * PI))
+	var tween2 = create_tween()
+	tween2.tween_property(self,"global_transform",bnt,1.0)
+	await tween2.finished
+#	await get_tree().process_frame
+	var candidate_points = get_face_direction_points_for_flash_lights()
+	candidate_points.shuffle()
+	var op = flash_light.global_position
+	var tween = create_tween()
+	for random_point in candidate_points:
+		var nb = get_normal_transform(op,random_point,flash_light.global_transform.basis.x,flash_light.global_transform)
+		tween.tween_property(flash_light,"global_transform",\
+			Transform3D(nb.rotated(-nb.y,PI / 2.0).orthonormalized(),op),1.0)
+		tween.tween_interval(1.0)
+	await tween.finished
+	flash_light.hide()
+	return
+	
+# pp global transform of axis object face direction
+# t object origin transform
+# origin from point
+# target target point
+# return basis.z is the final array
+func get_normal_transform(origin:Vector3,target:Vector3,pp:Vector3,t:Transform3D): # p1 normal pp need rotated axis
+	return t.looking_at(target,(target - origin).cross(pp).normalized(),true).basis
