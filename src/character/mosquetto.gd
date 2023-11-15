@@ -56,9 +56,12 @@ func _ready() -> void:
 	# Capture mouse cursor for mouse look
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	# Make SubViewport render lighting only
-#	sub_viewport.debug_draw = 2
-#	sub_viewport_2.debug_draw = 2
+	sub_viewport.debug_draw = 2
+	sub_viewport_2.debug_draw = 2
 #	light_detect_timer.timeout.connect(calculate_light)
+
+func hit_by_bat():
+	print("hit_by_bat")
 
 func bigguy_awake():
 	set_can_drink(false)
@@ -182,6 +185,8 @@ func _process(delta: float) -> void:
 	light_level.tint_progress.a = current_light_value # Also tint the progress texture with the above
 	
 func calculate_light():
+	DebugDraw3D.draw_camera_frustum(light_detection.get_node("Camera"),Color.BLUE)
+	DebugDraw3D.draw_camera_frustum(light_detection2.get_node("Camera"),Color.RED)
 	# Light detection
 	light_detection.global_position = global_position # Make light detection follow the player
 	light_detection2.global_position = global_position # Make light detection follow the player

@@ -12,7 +12,7 @@ func tick(actor: Node, _blackboard: Blackboard) -> int:
 		is_start = true
 		if task == null:
 			task = AsyncTask.new()
-			task.execute(a.random_attack)
+			task.execute(a.attack_target)
 			task.complete.connect(end)
 	if is_end:
 		clear_status()

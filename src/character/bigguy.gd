@@ -135,14 +135,19 @@ func check_mosquetto_insight():
 	if direction.dot(dir) > 0.4:
 		if mosquetto.current_light_value > 0.7:
 			print("find target")
+			is_find_target = true
 			attack_target_position = mosquetto.global_position
 			search_target_position = attack_target_position
+			return
+	is_find_target = false
 	
 func _physics_process(delta):
-	if current_state == Constants.BIGGUY_STATE.IDLE \
-		and search_target_position == Vector3.ZERO:
-#		check_mosquetto_insight()
-		pass
+	if current_state == Constants.BIGGUY_STATE.IDLE:
+		check_mosquetto_insight()
+		if is_tracing_target:
+			_update_target_location(search_target_position)
+		
+#		if attack_target_position != null
 	var current_position = global_position
 	var next_position = current_position
 	var direction = Vector3.ZERO
@@ -163,6 +168,11 @@ func _physics_process(delta):
 	velocity = ((currentRotation.normalized() * animation_tree.get_root_motion_position()) / delta)
 	move_and_slide()
 
+var is_tracing_target = false
+var is_find_target = false
+
+func trace_target(is_true):
+	is_tracing_target = is_true
 
 func random_search_around():
 	flash_light.show()
@@ -200,15 +210,37 @@ func random_attack():
 		await attack_with_bat()
 	return
 
-func attack_with_bat():
+func attack_target():
+	if randf() < 0.5:
+		await attack_with_smoke(attack_target_position)
+	else:
+		await attack_with_bat(attack_target_position)
+	return
+
+func attack_with_bat(p = null):
 	tennis_racket.show()
+	_bat_hit(p)
 	await _attack()
 	tennis_racket.hide()
 	return
-	
-func attack_with_smoke():
+
+func _bat_hit(p = null):
+	if p != null:
+		bat_hit_area.global_position = p
+	else:
+		bat_hit_area.position = Vector3(0,1,1)
+	await get_tree().create_timer(1.2,false).timeout
+	for b in bat_hit_area.get_overlapping_bodies():
+		if b.is_in_group("mosquetto"):
+			b.hit_by_bat()
+
+func attack_with_smoke(p = null):
 	spray_times_current = 0
-	var bnt = self.global_transform.looking_at(Vector3.FORWARD.rotated(Vector3.UP,randf() * 2.0 * PI))
+	var bnt
+	if p == null:
+		bnt = self.global_transform.looking_at(Vector3.FORWARD.rotated(Vector3.UP,randf() * 2.0 * PI))
+	else:
+		bnt = self.global_transform.looking_at(self.global_transform.affine_inverse().basis * p)
 	var tween2 = create_tween()
 	tween2.tween_property(self,"global_transform",bnt,1.0)
 	await tween2.finished
@@ -226,13 +258,13 @@ func attack_with_smoke():
 	nb = get_normal_transform(op,random_point,spray.global_transform.basis.x,spray.global_transform)
 	end_spray_transform = nb
 	tween.tween_property(spray,"global_transform",\
-		Transform3D(nb.rotated(nb.y,PI).orthonormalized(),op),15.0)
-	tween.parallel().tween_property(self,"smoke_attack_progress",1.0,15.0).from(0.0)
+		Transform3D(nb.rotated(nb.y,PI).orthonormalized(),op),5.0)
+	tween.parallel().tween_property(self,"smoke_attack_progress",1.0,5.0).from(0.0)
 	await tween.finished
 	spray.hide()
 	return
 
-const spray_times_total:int = 5
+const spray_times_total:int = 3
 var spray_times_current:int = 0
 var start_spray_transform
 var end_spray_transform
