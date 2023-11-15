@@ -7,6 +7,7 @@ var is_anoyed_by_player = false
 
 @onready var animation_player = $AnimationPlayer
 @onready var beehave_tree = $BeehaveTree
+@onready var head = $Armature_003/GeneralSkeleton/head
 
 @onready var animation_tree = $AnimationTree
 @onready var animation_state:AnimationNodeStateMachinePlayback\
@@ -18,6 +19,9 @@ var is_anoyed_by_player = false
 @export var on_bed_position_node_path:NodePath
 @onready var on_bed_position_node = get_node(on_bed_position_node_path)
 @export var search_path:Path3D
+@onready var tennis_racket = %TennisRacket
+@onready var spray = %Spray
+@onready var bat_hit_area = $BatHitArea
 
 @onready var flash_light = %flashLight
 var attack_target_position:Vector3
@@ -29,6 +33,8 @@ signal arrive_destination
 
 func _ready():
 	flash_light.hide()
+	spray.hide()
+	tennis_racket.hide()
 	if Constants.is_debug:
 		is_anoyed_by_player = true
 		is_ready_for_sleep = false
@@ -43,16 +49,15 @@ func drink_blood_changed(v):
 func _arrive():
 	arrive_destination.emit()
 
-func get_face_direction_points_for_flash_lights():
+func get_face_direction_points_for_flash_lights(radius,forward,count):
 	var direction = self.global_transform.basis * Vector3.BACK
 	var op = flash_light.global_position
-#	DebugDraw3D.draw_arrow_ray(flash_light.global_position,direction,0.5)
-	var r_count = 8
+	var r_count = count
 	var rad_inc = 2.0 * PI / r_count
-	var r = self.global_transform.basis * Vector3.LEFT * 2.4
+	var r = self.global_transform.basis * Vector3.LEFT * radius
 	var points = []
 	for x in r_count:
-		var rp = (op + direction * 2.5) + r.rotated(direction.normalized(),x * rad_inc)
+		var rp = (op + direction * forward) + r.rotated(direction.normalized(),x * rad_inc)
 		points.append(rp)
 	return points
 	
@@ -67,6 +72,7 @@ func _process(delta):
 		
 func _attack():
 	animation_tree.set("parameters/attack/request",true)
+	await get_tree().create_timer(2.0,false).timeout
 
 func _update_target_location(target):
 	navigation_agent_3d.target_position = target
@@ -80,7 +86,8 @@ func go_to_bed():
 func _unhandled_input(event):
 	if Input.is_action_just_pressed("ui_accept"):
 #		random_search_around()
-		beehave_tree.enabled = not beehave_tree.enabled
+		beehave_tree.enabled = true
+#		random_attack()
 	
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_MASK_RIGHT:
 		var camera = get_viewport().get_camera_3d() as Camera3D
@@ -118,7 +125,6 @@ func _turn_to_position(p):
 		tween.tween_property(self,"global_transform",nt,0.2)
 		await tween.finished
 	return
-@onready var head = $Armature_003/GeneralSkeleton/head
 
 func check_mosquetto_insight():
 	var mosquetto = get_tree().get_first_node_in_group("mosquetto")
@@ -166,7 +172,7 @@ func random_search_around():
 	tween2.tween_property(self,"global_transform",bnt,1.0)
 	await tween2.finished
 #	await get_tree().process_frame
-	var candidate_points = get_face_direction_points_for_flash_lights()
+	var candidate_points = get_face_direction_points_for_flash_lights(2.4,2.5,8)
 	candidate_points.shuffle()
 	var op = flash_light.global_position
 	var tween = create_tween()
@@ -186,3 +192,75 @@ func random_search_around():
 # return basis.z is the final array
 func get_normal_transform(origin:Vector3,target:Vector3,pp:Vector3,t:Transform3D): # p1 normal pp need rotated axis
 	return t.looking_at(target,(target - origin).cross(pp).normalized(),true).basis
+
+func random_attack():
+	if randf() < 0.5:
+		await attack_with_smoke()
+	else:
+		await attack_with_bat()
+	return
+
+func attack_with_bat():
+	tennis_racket.show()
+	await _attack()
+	tennis_racket.hide()
+	return
+	
+func attack_with_smoke():
+	spray_times_current = 0
+	var bnt = self.global_transform.looking_at(Vector3.FORWARD.rotated(Vector3.UP,randf() * 2.0 * PI))
+	var tween2 = create_tween()
+	tween2.tween_property(self,"global_transform",bnt,1.0)
+	await tween2.finished
+#	await get_tree().process_frame
+	var candidate_points = get_face_direction_points_for_flash_lights(2.4,2.5,2)
+	var op = spray.global_position
+	var tween = create_tween()
+	var random_point = candidate_points[0]
+	var nb = get_normal_transform(op,random_point,spray.global_transform.basis.x,spray.global_transform)
+	start_spray_transform = nb
+	tween.tween_property(spray,"global_transform",\
+		Transform3D(nb.rotated(nb.y,PI).orthonormalized(),op),1.0)
+	tween.tween_callback(spray.show)
+	random_point = candidate_points[1]
+	nb = get_normal_transform(op,random_point,spray.global_transform.basis.x,spray.global_transform)
+	end_spray_transform = nb
+	tween.tween_property(spray,"global_transform",\
+		Transform3D(nb.rotated(nb.y,PI).orthonormalized(),op),15.0)
+	tween.parallel().tween_property(self,"smoke_attack_progress",1.0,15.0).from(0.0)
+	await tween.finished
+	spray.hide()
+	return
+
+const spray_times_total:int = 5
+var spray_times_current:int = 0
+var start_spray_transform
+var end_spray_transform
+const distance_between_smoke = 0.8
+var smoke_attack_progress:float = 0.0:
+	set(val):
+		smoke_attack_progress = val
+		if is_instance_valid(spray):
+			var ct = int(smoke_attack_progress / (1.0 / spray_times_total))
+			if ct > spray_times_current:
+				for i in (ct - spray_times_current):
+					_spawn_spray_smoke(spray_times_current + i)
+				spray_times_current = ct
+				
+func _spawn_spray_smoke(i):
+	var nt = (start_spray_transform as Transform3D).interpolate_with(end_spray_transform,float(i) / float(spray_times_total))
+	var space: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state as PhysicsDirectSpaceState3D
+	var params2 = PhysicsRayQueryParameters3D.new()
+	params2.set_collide_with_bodies(true)
+	params2.set_collide_with_areas(false)
+	params2.collision_mask = 1
+	params2.from = spray.get_node("SmokeRayOrigin").global_position
+	params2.to = params2.from + nt.basis.z * 10.0
+	var result = space.intersect_ray(params2)
+	if result != null and not result.is_empty():
+		var total_v = (result.position - params2.from)
+		var total_length = total_v.length()
+		var v = total_v.normalized()
+		for j in 3:
+			var p = params2.from + v * (j + 1) * distance_between_smoke
+			Signals.spawn_smoke.emit(p)

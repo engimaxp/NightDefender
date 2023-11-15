@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://b2bcuryropuen"]
+[gd_scene load_steps=28 format=3 uid="uid://b2bcuryropuen"]
 
 [ext_resource type="PackedScene" uid="uid://0v61a3p01rbs" path="res://src/character/bigguy.tscn" id="1_iu6fh"]
 [ext_resource type="PackedScene" uid="uid://c0wbxf0lqxnfc" path="res://src/character/mosquetto.tscn" id="2_ogrxj"]
@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://b0yxthi6wcc2l" path="res://asset/model/furniture/doorway.glb" id="15_gc2vx"]
 [ext_resource type="PackedScene" uid="uid://d2fjvcliy8dgd" path="res://src/furniture/computer_screen.tscn" id="16_ks7p4"]
 [ext_resource type="PackedScene" uid="uid://dojs471hfiuuu" path="res://asset/model/furniture/deskCorner.glb" id="16_s11tn"]
+[ext_resource type="PackedScene" uid="uid://56bq8sf2xqaq" path="res://src/vfx/vfx_layer.tscn" id="18_1e2wc"]
 [ext_resource type="PackedScene" uid="uid://codt0xov4h0iy" path="res://asset/model/furniture/chairDesk.glb" id="18_n15hn"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sqm8b"]
@@ -196,3 +197,5 @@ collision_mask = 5
 
 [node name="chairDesk" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("18_n15hn")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 1.56631, 0, 1.85791)
+
+[node name="VFXLayer" parent="Map" instance=ExtResource("18_1e2wc")]

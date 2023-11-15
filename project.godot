@@ -92,7 +92,3 @@ dive={
 3d_physics/layer_2="BigGuy"
 3d_physics/layer_3="Mosquetto"
 3d_physics/layer_4="bodypart"
-
-[rendering]
-
-renderer/rendering_method="mobile"
