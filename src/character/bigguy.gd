@@ -6,9 +6,9 @@ var is_ready_for_sleep = true
 var is_anoyed_by_player = false
 
 @onready var animation_player = $AnimationPlayer
-@onready var beehave_tree = $BeehaveTree
+@onready var tree = $BeehaveTree
 @onready var head = $Armature_003/GeneralSkeleton/head
-
+@export var light_level_cautious = 0.0
 @onready var animation_tree = $AnimationTree
 @onready var animation_state:AnimationNodeStateMachinePlayback\
 	 = animation_tree.get("parameters/playback") as AnimationNodeStateMachinePlayback
@@ -60,7 +60,11 @@ func get_face_direction_points_for_flash_lights(radius,forward,count):
 		var rp = (op + direction * forward) + r.rotated(direction.normalized(),x * rad_inc)
 		points.append(rp)
 	return points
-	
+
+@onready var condition_label = $VBoxContainer/ConditionLabel
+@onready var action_label = $VBoxContainer/ActionLabel
+
+
 func _process(delta):
 	if not navigation_agent_3d.is_navigation_finished():
 		var mesh:ImmediateMesh = debug_path.mesh as ImmediateMesh
@@ -69,7 +73,18 @@ func _process(delta):
 		for p in navigation_agent_3d.get_current_navigation_path():
 			mesh.surface_add_vertex(p)
 		mesh.surface_end()
-		
+	
+	
+	if tree.get_last_condition():
+		condition_label.text = str(tree.get_last_condition(), " -> ", tree.get_last_condition_status())
+	else:
+		condition_label.text = "no condition"
+
+	if tree.get_running_action():
+		action_label.text = str(tree.get_running_action(), " -> RUNNING")
+	else:
+		action_label.text = "no running action"
+	
 func _attack():
 	animation_tree.set("parameters/attack/request",true)
 	await get_tree().create_timer(2.0,false).timeout
@@ -86,7 +101,7 @@ func go_to_bed():
 func _unhandled_input(event):
 	if Input.is_action_just_pressed("ui_accept"):
 #		random_search_around()
-		beehave_tree.enabled = true
+		tree.enabled = true
 #		random_attack()
 	
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_MASK_RIGHT:
@@ -132,16 +147,20 @@ func check_mosquetto_insight():
 	var dir = global_transform.basis * Vector3.BACK
 	DebugDraw3D.draw_arrow_ray(head.global_position,direction,0.4,Color.WHITE)
 	DebugDraw3D.draw_arrow_ray(head.global_position,dir,0.4,Color.RED)
-	if direction.dot(dir) > 0.4:
-		if mosquetto.current_light_value > 0.7:
+	if direction.dot(dir) > 0.4 and direction.length() <= 4.0:
+		if mosquetto.current_light_value > light_level_cautious:
 			print("find target")
 			is_find_target = true
 			attack_target_position = mosquetto.global_position
-			search_target_position = attack_target_position
+			var atp = Vector3(attack_target_position.x,global_position.y,attack_target_position.z)
+			search_target_position = atp + (global_position - atp).normalized() * 0.5
 			return
 	is_find_target = false
 	
 func _physics_process(delta):
+	
+	DebugDraw3D.draw_sphere(search_target_position,0.3,Color.RED)
+	DebugDraw3D.draw_sphere(attack_target_position,0.2,Color.YELLOW)
 	if current_state == Constants.BIGGUY_STATE.IDLE:
 		check_mosquetto_insight()
 		if is_tracing_target:
@@ -186,11 +205,12 @@ func random_search_around():
 	candidate_points.shuffle()
 	var op = flash_light.global_position
 	var tween = create_tween()
-	for random_point in candidate_points:
-		var nb = get_normal_transform(op,random_point,flash_light.global_transform.basis.x,flash_light.global_transform)
-		tween.tween_property(flash_light,"global_transform",\
-			Transform3D(nb.rotated(-nb.y,PI / 2.0).orthonormalized(),op),1.0)
-		tween.tween_interval(1.0)
+#	for random_point in candidate_points:
+	var random_point = candidate_points.pop_front()
+	var nb = get_normal_transform(op,random_point,flash_light.global_transform.basis.x,flash_light.global_transform)
+	tween.tween_property(flash_light,"global_transform",\
+		Transform3D(nb.rotated(-nb.y,PI / 2.0).orthonormalized(),op),1.0)
+	tween.tween_interval(1.0)
 	await tween.finished
 	flash_light.hide()
 	return
@@ -240,7 +260,8 @@ func attack_with_smoke(p = null):
 	if p == null:
 		bnt = self.global_transform.looking_at(Vector3.FORWARD.rotated(Vector3.UP,randf() * 2.0 * PI))
 	else:
-		bnt = self.global_transform.looking_at(self.global_transform.affine_inverse().basis * p)
+		bnt = self.global_transform.looking_at(Vector3(p.x,self.global_position.y,p.z),Vector3.UP)
+		bnt = Transform3D(bnt.basis.rotated(Vector3.UP,PI).orthonormalized(),self.global_position)
 	var tween2 = create_tween()
 	tween2.tween_property(self,"global_transform",bnt,1.0)
 	await tween2.finished

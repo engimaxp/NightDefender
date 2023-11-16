@@ -14,6 +14,7 @@ func tick(actor: Node, _blackboard: Blackboard) -> int:
 			task = AsyncTask.new()
 			task.execute(a.random_search_around)
 			task.complete.connect(end)
+	
 	if is_end:
 		clear_status()
 		return SUCCESS
