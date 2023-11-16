@@ -1,5 +1,6 @@
-[gd_scene load_steps=28 format=3 uid="uid://b2bcuryropuen"]
+[gd_scene load_steps=30 format=3 uid="uid://b2bcuryropuen"]
 
+[ext_resource type="Script" path="res://src/main_scene.gd" id="1_ecxy7"]
 [ext_resource type="PackedScene" uid="uid://0v61a3p01rbs" path="res://src/character/bigguy.tscn" id="1_iu6fh"]
 [ext_resource type="PackedScene" uid="uid://c0wbxf0lqxnfc" path="res://src/character/mosquetto.tscn" id="2_ogrxj"]
 [ext_resource type="PackedScene" uid="uid://1dc7plspbgg6" path="res://src/furniture/bear.tscn" id="3_3krvm"]
@@ -18,6 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://dojs471hfiuuu" path="res://asset/model/furniture/deskCorner.glb" id="16_s11tn"]
 [ext_resource type="PackedScene" uid="uid://56bq8sf2xqaq" path="res://src/vfx/vfx_layer.tscn" id="18_1e2wc"]
 [ext_resource type="PackedScene" uid="uid://codt0xov4h0iy" path="res://asset/model/furniture/chairDesk.glb" id="18_n15hn"]
+[ext_resource type="PackedScene" uid="uid://barl4q1kugrmm" path="res://scenes/gameplay/pause-layer/pause-layer.tscn" id="20_2okcd"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sqm8b"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -67,6 +69,7 @@ size = Vector2(7, 7)
 orientation = 2
 
 [node name="MainScene" type="Node"]
+script = ExtResource("1_ecxy7")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_knys7")
@@ -201,3 +204,5 @@ collision_mask = 5
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 1.56631, 0, 1.85791)
 
 [node name="VFXLayer" parent="Map" instance=ExtResource("18_1e2wc")]
+
+[node name="PauseLayer" parent="." instance=ExtResource("20_2okcd")]

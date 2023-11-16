@@ -145,8 +145,8 @@ func check_mosquetto_insight():
 	var mosquetto = get_tree().get_first_node_in_group("mosquetto")
 	var direction = mosquetto.global_position - head.global_position
 	var dir = global_transform.basis * Vector3.BACK
-	DebugDraw3D.draw_arrow_ray(head.global_position,direction,0.4,Color.WHITE)
-	DebugDraw3D.draw_arrow_ray(head.global_position,dir,0.4,Color.RED)
+#	DebugDraw3D.draw_arrow_ray(head.global_position,direction,0.4,Color.WHITE)
+#	DebugDraw3D.draw_arrow_ray(head.global_position,dir,0.4,Color.RED)
 	if direction.dot(dir) > 0.4 and direction.length() <= 4.0:
 		if mosquetto.current_light_value > light_level_cautious:
 			is_find_target = true
@@ -158,8 +158,8 @@ func check_mosquetto_insight():
 	
 func _physics_process(delta):
 	
-	DebugDraw3D.draw_sphere(search_target_position,0.3,Color.RED)
-	DebugDraw3D.draw_sphere(attack_target_position,0.2,Color.YELLOW)
+#	DebugDraw3D.draw_sphere(search_target_position,0.3,Color.RED)
+#	DebugDraw3D.draw_sphere(attack_target_position,0.2,Color.YELLOW)
 	if current_state == Constants.BIGGUY_STATE.IDLE:
 		check_mosquetto_insight()
 		if is_tracing_target:

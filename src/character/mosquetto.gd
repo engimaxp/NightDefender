@@ -17,6 +17,7 @@ const MOSQUETTO_HOLOGRAM_SCENE = preload("res://src/character/mosquetto_hologram
 @onready var sub_viewport_2 = $SubViewport2
 @onready var light_detection2 = $SubViewport2/LightDetection
 @onready var ray_cast_3d = $Armature/RayCast3D
+@onready var armature = $Armature
 
 @onready var texture_rect := $TextureRect
 @onready var texture_rect_2 = $TextureRect2
@@ -51,8 +52,6 @@ func _ready() -> void:
 	set_can_drink(false)
 	Signals.bigguy_sleep.connect(set_can_drink.bind(true))
 	Signals.bigguy_awake.connect(bigguy_awake)
-	hologram = get_hologram()
-	hologram.hide()
 #	camera = get_viewport().get_camera_3d()
 	# Capture mouse cursor for mouse look
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -60,6 +59,10 @@ func _ready() -> void:
 	sub_viewport.debug_draw = 2
 	sub_viewport_2.debug_draw = 2
 #	light_detect_timer.timeout.connect(calculate_light)
+	Signals.scene_pre_start.connect(_pre_start)
+func _pre_start():
+	hologram = get_hologram()
+	hologram.hide()
 
 func hit_by_bat():
 	health_level.lose_health(25)
@@ -146,8 +149,6 @@ func detect_collide():
 			target_land_position = result.position
 			target_land_basis = hologram.global_transform.basis
 			is_on_big_guy = result.collider.is_in_group("big_guy_part")
-#			DebugDraw3D.draw_arrow_ray(result.position,result.normal,0.15,Color.REBECCA_PURPLE)
-#		DebugDraw3D.draw_sphere(collide_result[0],0.05,Color.WHITE)
 	hologram.visible = is_landable and not is_landed
 
 func get_normal_transform(p1:Vector3,pp:Vector3): # p1 normal pp need rotated axis
@@ -197,10 +198,20 @@ func smoke_effect(is_true):
 		Signals.trigger_vfx.emit("poison",false)
 		health_level.stop_losing_health()
 
+func scale_up(d):
+	armature.scale += Vector3.ONE * 0.0005 * d
+	mesh_octahedron.scale += Vector3.ONE * 0.0005 * d
+	camera_controller.spring_arm_3d.spring_length += 0.002 * d
+@onready var mesh_octahedron = $SubViewport/LightDetection/MeshOctahedron
+@onready var collision_shape_3d = $CollisionShape3D
+@onready var camera_controller = $CameraController
+
+
 func _process(delta: float) -> void:
 	calculate_light()
 	if is_drinking:
 		drink_time += delta
+		scale_up(delta)
 		Signals.drink_blood_changed.emit(drink_time)
 	
 	# Mouse look
@@ -224,8 +235,8 @@ func _process(delta: float) -> void:
 	light_level.tint_progress.a = current_light_value # Also tint the progress texture with the above
 	
 func calculate_light():
-	DebugDraw3D.draw_camera_frustum(light_detection.get_node("Camera"),Color.BLUE)
-	DebugDraw3D.draw_camera_frustum(light_detection2.get_node("Camera"),Color.RED)
+#	DebugDraw3D.draw_camera_frustum(light_detection.get_node("Camera"),Color.BLUE)
+#	DebugDraw3D.draw_camera_frustum(light_detection2.get_node("Camera"),Color.RED)
 	# Light detection
 	light_detection.global_position = global_position # Make light detection follow the player
 	light_detection2.global_position = global_position # Make light detection follow the player
