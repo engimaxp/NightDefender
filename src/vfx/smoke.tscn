@@ -1,6 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://bde24knk70dkx"]
+[gd_scene load_steps=8 format=3 uid="uid://bde24knk70dkx"]
 
 [ext_resource type="Script" path="res://src/vfx/smoke.gd" id="1_5wdd2"]
+[ext_resource type="Shader" path="res://src/vfx/smoke.gdshader" id="2_5wv8a"]
+[ext_resource type="Script" path="res://src/vfx/FogVolume.gd" id="2_bhl1p"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_3h6jp"]
 
@@ -10,15 +12,26 @@
 transparency = 1
 albedo_color = Color(1, 1, 1, 0.521569)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nqq37"]
+shader = ExtResource("2_5wv8a")
+shader_parameter/density = 1.0
+shader_parameter/albedo = Color(1, 0.811765, 0.984314, 1)
+shader_parameter/emission = Color(1, 0.811765, 0.984314, 1)
+shader_parameter/height_falloff = 0.0
+shader_parameter/edge_fade = 0.1
+
 [node name="Smoke" type="Node3D"]
 script = ExtResource("1_5wdd2")
 
 [node name="Area3D" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 4
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
 shape = SubResource("BoxShape3D_3h6jp")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+visible = false
 mesh = SubResource("BoxMesh_2gewg")
 surface_material_override/0 = SubResource("StandardMaterial3D_unmng")
 
@@ -26,4 +39,13 @@ surface_material_override/0 = SubResource("StandardMaterial3D_unmng")
 wait_time = 10.0
 one_shot = true
 
+[node name="FogVolume" type="FogVolume" parent="."]
+size = Vector3(2.5, 1.5, 2.5)
+shape = 0
+material = SubResource("ShaderMaterial_nqq37")
+script = ExtResource("2_bhl1p")
+density_path = "shader_parameter/density"
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -20,6 +20,7 @@ const MOSQUETTO_HOLOGRAM_SCENE = preload("res://src/character/mosquetto_hologram
 
 @onready var texture_rect := $TextureRect
 @onready var texture_rect_2 = $TextureRect2
+@onready var health_level = $HealthLevel
 
 @export_flags_3d_physics var land_collision_mask = 9
 @onready var color_rect := $ColorRect
@@ -61,12 +62,22 @@ func _ready() -> void:
 #	light_detect_timer.timeout.connect(calculate_light)
 
 func hit_by_bat():
+	health_level.lose_health(25)
+	Signals.trigger_vfx.emit("hit",true)
 	print("hit_by_bat")
 
 func bigguy_awake():
 	set_can_drink(false)
+	if is_drinking:
+		stop_drinking()
 	if is_landed:
 		take_of()
+
+func stop_drinking():
+	is_drinking = false
+	Signals.add_points.emit(1000)
+	health_level.stop_adding_health()
+	Signals.trigger_vfx.emit("heal",false)
 
 func _physics_process(delta: float) -> void:
 	if is_landing:
@@ -155,9 +166,37 @@ var drink_time = 0
 
 func drink_blood():
 	is_drinking = true
+	health_level.start_adding_health()
+	Signals.trigger_vfx.emit("heal",true)
 	animation_tree.set("parameters/Transition/transition_request","drink")
 	await get_tree().create_timer(1.6,false).timeout
-	
+
+var clouds_of_smokes = []
+
+func in_smoke_cloud(c):
+	if not clouds_of_smokes.has(c):
+		if not c.sig_exit_scene.is_connected(out_smoke_cloud.bind(c)):
+			c.sig_exit_scene.connect(out_smoke_cloud.bind(c))
+		clouds_of_smokes.append(c)
+	if clouds_of_smokes.size() > 0:
+		smoke_effect(true)
+
+func out_smoke_cloud(c):
+	if clouds_of_smokes.has(c):
+		if c.sig_exit_scene.is_connected(out_smoke_cloud.bind(c)):
+			c.sig_exit_scene.disconnect(out_smoke_cloud.bind(c))
+		clouds_of_smokes.erase(c)
+	if clouds_of_smokes.size() == 0:
+		smoke_effect(false)
+		
+func smoke_effect(is_true):
+	if is_true:
+		Signals.trigger_vfx.emit("poison",true)
+		health_level.start_losing_health()
+	else:
+		Signals.trigger_vfx.emit("poison",false)
+		health_level.stop_losing_health()
+
 func _process(delta: float) -> void:
 	calculate_light()
 	if is_drinking:
@@ -231,7 +270,8 @@ func take_of():
 	drink_time = 0
 	is_landed = false
 	is_taking_of = true
-	is_drinking = false
+	if is_drinking:
+		stop_drinking()
 	animation_tree.set("parameters/Transition/transition_request","open_wing")
 	var tween = create_tween()
 	tween.tween_interval(1.0)

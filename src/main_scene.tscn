@@ -34,6 +34,8 @@ ambient_light_sky_contribution = 0.08
 ambient_light_energy = 0.1
 tonemap_mode = 2
 glow_enabled = true
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0
 
 [sub_resource type="Curve3D" id="Curve3D_jrf04"]
 _data = {

@@ -32,8 +32,28 @@ func _physics_process(delta):
 			velocity.y = 0
 	self.global_position += velocity * delta
 
+@onready var fog_volume = $FogVolume
+
+func _ready():
+	await fog_volume.start_fog()
 
 func _on_timer_timeout():
+	await fog_volume.stop_fog()
 	var tween = create_tween()
 	tween.tween_property(self,"scale",Vector3.ONE * (0.01),1.0)
+	tween.tween_callback(self.exit_scene)
 	tween.tween_callback(self.queue_free)
+
+func exit_scene():
+	sig_exit_scene.emit()
+
+signal sig_exit_scene
+
+func _on_area_3d_body_entered(body):
+	if body.is_in_group("mosquetto"):
+		body.in_smoke_cloud(self)
+
+
+func _on_area_3d_body_exited(body):
+	if body.is_in_group("mosquetto"):
+		body.out_smoke_cloud(self)

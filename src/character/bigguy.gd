@@ -149,7 +149,6 @@ func check_mosquetto_insight():
 	DebugDraw3D.draw_arrow_ray(head.global_position,dir,0.4,Color.RED)
 	if direction.dot(dir) > 0.4 and direction.length() <= 4.0:
 		if mosquetto.current_light_value > light_level_cautious:
-			print("find target")
 			is_find_target = true
 			attack_target_position = mosquetto.global_position
 			var atp = Vector3(attack_target_position.x,global_position.y,attack_target_position.z)
@@ -185,6 +184,7 @@ func _physics_process(delta):
 	animation_tree.set("parameters/move_blend/blend_amount",lerp_blend)
 	var currentRotation = global_transform.basis.get_rotation_quaternion()
 	velocity = ((currentRotation.normalized() * animation_tree.get_root_motion_position()) / delta)
+	velocity.y = 0
 	move_and_slide()
 
 var is_tracing_target = false

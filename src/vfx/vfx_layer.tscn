@@ -1,6 +1,115 @@
-[gd_scene load_steps=2 format=3 uid="uid://56bq8sf2xqaq"]
+[gd_scene load_steps=12 format=3 uid="uid://56bq8sf2xqaq"]
 
 [ext_resource type="Script" path="res://src/vfx/vfx_layer.gd" id="1_e3ab5"]
+[ext_resource type="Shader" path="res://src/vfx/vfx_layer.gdshader" id="2_bd26a"]
+[ext_resource type="Texture2D" uid="uid://lr0cdr8ciwyg" path="res://asset/vfx/dirt_01.png" id="3_mo3qv"]
+[ext_resource type="Shader" path="res://src/vfx/heal_effect.gdshader" id="4_hylxc"]
+[ext_resource type="Texture2D" uid="uid://i2trgtne8mlv" path="res://asset/vfx/blob_shadow.png" id="5_glx23"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j10gu"]
+shader = ExtResource("2_bd26a")
+shader_parameter/tint_color = Color(0.988235, 0.117647, 0.117647, 1)
+shader_parameter/display_range = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bxv5b"]
+shader = ExtResource("4_hylxc")
+shader_parameter/tint_color = Color(0.486275, 0.890196, 0.286275, 1)
+shader_parameter/display_range = 1.0
+
+[sub_resource type="Animation" id="Animation_p4dqw"]
+resource_name = "hit"
+length = 1.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HitEffect:material:shader_parameter/display_range")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.4, 0.5, 0.7, 0.9, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 1.0, 0.5, 1.0, 1.0, 0.5, 1.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_m74rn"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HitEffect:material:shader_parameter/display_range")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HealEffect:material:shader_parameter/display_range")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+
+[sub_resource type="Animation" id="Animation_84sjn"]
+resource_name = "heal"
+length = 4.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HealEffect:material:shader_parameter/display_range")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2, 3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.5, 0.1, 0.5, 0.1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ahber"]
+_data = {
+"RESET": SubResource("Animation_m74rn"),
+"heal": SubResource("Animation_84sjn"),
+"hit": SubResource("Animation_p4dqw")
+}
 
 [node name="VFXLayer" type="Node3D"]
 script = ExtResource("1_e3ab5")
+
+[node name="HitEffect" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_j10gu")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_mo3qv")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HealEffect" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_bxv5b")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("5_glx23")
+expand_mode = 1
+
+[node name="AnimationTree" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_ahber")
+}
