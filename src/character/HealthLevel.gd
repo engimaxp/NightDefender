@@ -28,7 +28,7 @@ func _process(delta):
 		current_health = lerp(current_health,target_health,delta)
 	current_health = clamp(current_health,0,max_health)
 	self.value = current_health / max_health
-	if current_health <= 0:
+	if current_health <= 0.5:
 		is_dead = true
 		Signals.game_over.emit()
 	

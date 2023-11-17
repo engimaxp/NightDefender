@@ -4,6 +4,8 @@ class_name BigGuy
 var current_state:Constants.BIGGUY_STATE = Constants.BIGGUY_STATE.IDLE
 var is_ready_for_sleep = true
 var is_anoyed_by_player = false
+@onready var head_aware = %HeadAware
+@onready var ear_aware = %EarAware
 
 @onready var animation_player = $AnimationPlayer
 @onready var tree = $BeehaveTree
@@ -186,20 +188,32 @@ func _turn_to_position(p):
 		await tween.finished
 	return
 
+func get_mosqueto_from_array(array):
+	for a in array:
+		if a.is_in_group("mosquetto"):
+			return a
+	return null
+	
 func check_mosquetto_insight():
 	var mosquetto = get_tree().get_first_node_in_group("mosquetto")
 	var direction = mosquetto.global_position - head.global_position
 	var dir = global_transform.basis * Vector3.BACK
 #	DebugDraw3D.draw_arrow_ray(head.global_position,direction,0.4,Color.WHITE)
 #	DebugDraw3D.draw_arrow_ray(head.global_position,dir,0.4,Color.RED)
+	var a = get_mosqueto_from_array(head_aware.get_overlapping_bodies())
+	var b = get_mosqueto_from_array(ear_aware.get_overlapping_bodies())
+	is_find_target = false
 	if direction.dot(dir) > 0.4 and direction.length() <= 4.0:
 		if mosquetto.current_light_value > light_level_cautious:
 			is_find_target = true
-			attack_target_position = mosquetto.global_position
-			var atp = Vector3(attack_target_position.x,global_position.y,attack_target_position.z)
-			search_target_position = atp + (global_position - atp).normalized() * 0.5
-			return
-	is_find_target = false
+	if a != null:
+		is_find_target = true
+	if b != null and b.is_in_air():
+		is_find_target = true
+	if is_find_target:
+		attack_target_position = mosquetto.global_position
+		var atp = Vector3(attack_target_position.x,global_position.y,attack_target_position.z)
+		search_target_position = atp + (global_position - atp).normalized() * 0.5
 	
 func _physics_process(delta):
 	
@@ -277,7 +291,7 @@ func random_attack():
 	return
 
 func attack_target():
-	if randf() < 0.5:
+	if randf() < 0.1:
 		await attack_with_smoke(attack_target_position)
 	else:
 		await attack_with_bat(attack_target_position)

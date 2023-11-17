@@ -7,6 +7,7 @@ var current_score:float = 0
 var target_score:float = 0
 # `pre_start()` is called when a scene is loaded.
 # Use this function to receive params from `Game.change_scene(params)`.
+@onready var score_timer = $ScoreTimer
 
 func score_change(score):
 	target_score += score
@@ -32,4 +33,15 @@ func pre_start(params):
 func start():
 	print("gameplay.gd: start() called")
 	Signals.scene_pre_start.emit()
+	Signals.bigguy_awake.connect(score_timer.start)
+	Signals.bigguy_sleep.connect(score_timer.stop)
+	Signals.game_over.connect(game_over)
+var is_game_over = false
 
+func game_over():
+	is_game_over = true
+
+func _on_score_timer_timeout():
+	if not is_game_over:
+		Signals.add_points.emit(10)
+	

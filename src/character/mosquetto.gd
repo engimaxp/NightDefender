@@ -43,6 +43,8 @@ var is_on_big_guy:= false
 var target_land_basis:Basis
 var target_land_position:Vector3
 
+func is_in_air():
+	return not is_landed and not is_landing and not is_taking_of
 
 func set_can_drink(is_can_drink):
 	ray_cast_3d.set_collision_mask_value(4,is_can_drink)
@@ -208,6 +210,10 @@ func scale_up(d):
 	mesh_octahedron.scale += Vector3.ONE * 0.0005 * d
 	collision_shape_3d.scale += Vector3.ONE * 0.0005 * d
 	camera_controller.spring_arm_3d.spring_length += 0.002 * d
+	var big = get_tree().get_first_node_in_group("big") as BigGuy
+	big.light_level_cautious -= 0.001 * d
+	
+	
 @onready var mesh_octahedron = $SubViewport/LightDetection/MeshOctahedron
 @onready var collision_shape_3d = $CollisionShape3D
 @onready var camera_controller = $CameraController
