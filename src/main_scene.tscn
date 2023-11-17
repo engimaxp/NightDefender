@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://b2bcuryropuen"]
+[gd_scene load_steps=33 format=3 uid="uid://b2bcuryropuen"]
 
 [ext_resource type="Script" path="res://src/main_scene.gd" id="1_ecxy7"]
 [ext_resource type="PackedScene" uid="uid://0v61a3p01rbs" path="res://src/character/bigguy.tscn" id="1_iu6fh"]
@@ -20,6 +20,8 @@
 [ext_resource type="PackedScene" uid="uid://56bq8sf2xqaq" path="res://src/vfx/vfx_layer.tscn" id="18_1e2wc"]
 [ext_resource type="PackedScene" uid="uid://53b6dvjy1e8v" path="res://src/furniture/chair_desk.tscn" id="18_6kcpo"]
 [ext_resource type="PackedScene" uid="uid://barl4q1kugrmm" path="res://scenes/gameplay/pause-layer/pause-layer.tscn" id="20_2okcd"]
+[ext_resource type="FontFile" uid="uid://cnmrfe6f588ij" path="res://asset/font/HarmonyOS_Sans_SC_Black.ttf" id="21_c1rqp"]
+[ext_resource type="PackedScene" uid="uid://jvjfnsqtgkx5" path="res://src/util/game_over.tscn" id="22_x4tbm"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sqm8b"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -67,6 +69,11 @@ orientation = 0
 [sub_resource type="PlaneMesh" id="PlaneMesh_rdiqb"]
 size = Vector2(7, 7)
 orientation = 2
+
+[sub_resource type="LabelSettings" id="LabelSettings_0au3c"]
+font = ExtResource("21_c1rqp")
+font_size = 32
+font_color = Color(1, 1, 0.278431, 1)
 
 [node name="MainScene" type="Node"]
 script = ExtResource("1_ecxy7")
@@ -217,3 +224,22 @@ transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 1.56631, 0, 1.85791)
 [node name="VFXLayer" parent="Map" instance=ExtResource("18_1e2wc")]
 
 [node name="PauseLayer" parent="." instance=ExtResource("20_2okcd")]
+
+[node name="ScoreLabel" type="Label" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -77.0
+offset_top = -74.0
+offset_right = -37.0
+offset_bottom = -51.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Score
+123123123"
+label_settings = SubResource("LabelSettings_0au3c")
+horizontal_alignment = 2
+
+[node name="GameOver" parent="." instance=ExtResource("22_x4tbm")]

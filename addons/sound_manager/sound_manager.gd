@@ -5,8 +5,6 @@ const SoundEffectsPlayer = preload("res://addons/sound_manager/sound_effects.gd"
 const MusicPlayer = preload("res://addons/sound_manager/music.gd")
 
 @onready var MainSceneMusic = load("res://asset/music/Casual 8-bit 2.wav")
-@onready var GameMusic = load("res://asset/music/Pixel adventures.mp3")
-@onready var WinMusic = load("res://asset/music/8bitvictory.ogg")
 
 @onready var SFX_Block1 = load("res://asset/sfx/Block1.ogg")
 @onready var SFX_Exp1 = load("res://asset/sfx/Exp1.ogg")

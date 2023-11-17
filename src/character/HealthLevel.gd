@@ -30,6 +30,7 @@ func _process(delta):
 	self.value = current_health / max_health
 	if current_health <= 0:
 		is_dead = true
+		Signals.game_over.emit()
 	
 func start_adding_health():
 	state = 2

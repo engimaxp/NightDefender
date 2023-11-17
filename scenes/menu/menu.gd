@@ -2,6 +2,7 @@ extends Control
 
 
 func _ready():
+	SoundManager.play_music(SoundManager.MainSceneMusic)
 	# needed for gamepads to work
 	$VBoxContainer/PlayButton.grab_focus()
 	if OS.has_feature('HTML5'):
@@ -9,6 +10,7 @@ func _ready():
 
 
 func _on_PlayButton_pressed() -> void:
+	SoundManager.stop_music(0.5)
 	var params = {
 		"show_progress_bar": true,
 		"a_number": 10,

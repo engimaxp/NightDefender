@@ -47,8 +47,13 @@ var target_land_position:Vector3
 func set_can_drink(is_can_drink):
 	ray_cast_3d.set_collision_mask_value(4,is_can_drink)
 	land_collision_mask = ray_cast_3d.collision_mask
-	
+
+func game_over():
+	set_physics_process(false)
+	set_process(false)
+
 func _ready() -> void:
+	Signals.game_over.connect(game_over)
 	set_can_drink(false)
 	Signals.bigguy_sleep.connect(set_can_drink.bind(true))
 	Signals.bigguy_awake.connect(bigguy_awake)

@@ -1,0 +1,59 @@
+[gd_scene load_steps=3 format=3 uid="uid://jvjfnsqtgkx5"]
+
+[ext_resource type="Script" path="res://src/util/game_over.gd" id="1_xe3p4"]
+[ext_resource type="Theme" uid="uid://ducfept6pmkkm" path="res://assets/ui-theme.tres" id="2_0aux8"]
+
+[node name="GameOver" type="CanvasLayer"]
+process_mode = 3
+script = ExtResource("1_xe3p4")
+
+[node name="PauseOverlay" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_0aux8")
+
+[node name="ColorRect" type="ColorRect" parent="PauseOverlay"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.243137, 0.211765, 0.290196, 0.717647)
+
+[node name="VBoxOptions" type="VBoxContainer" parent="PauseOverlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -80.5
+offset_top = -49.0
+offset_right = 80.5
+offset_bottom = 49.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="Info" type="Label" parent="PauseOverlay/VBoxOptions"]
+layout_mode = 2
+text = "Game Over"
+
+[node name="Score" type="Label" parent="PauseOverlay/VBoxOptions"]
+layout_mode = 2
+text = "Score:"
+
+[node name="Restart" type="LinkButton" parent="PauseOverlay/VBoxOptions"]
+layout_mode = 2
+focus_mode = 2
+text = "Restart"
+
+[node name="MainMenu" type="LinkButton" parent="PauseOverlay/VBoxOptions"]
+layout_mode = 2
+focus_mode = 2
+text = "MAIN MENU"
+
+[connection signal="pressed" from="PauseOverlay/VBoxOptions/Restart" to="." method="_on_restart_pressed"]
+[connection signal="pressed" from="PauseOverlay/VBoxOptions/MainMenu" to="." method="_on_main_menu_pressed"]

@@ -110,13 +110,13 @@ func get_face_direction_points_for_flash_lights(radius,forward,count):
 
 
 func _process(delta):
-	if not navigation_agent_3d.is_navigation_finished():
-		var mesh:ImmediateMesh = debug_path.mesh as ImmediateMesh
-		mesh.clear_surfaces()
-		mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP)
-		for p in navigation_agent_3d.get_current_navigation_path():
-			mesh.surface_add_vertex(p)
-		mesh.surface_end()
+#	if not navigation_agent_3d.is_navigation_finished():
+#		var mesh:ImmediateMesh = debug_path.mesh as ImmediateMesh
+#		mesh.clear_surfaces()
+#		mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP)
+#		for p in navigation_agent_3d.get_current_navigation_path():
+#			mesh.surface_add_vertex(p)
+#		mesh.surface_end()
 	
 	
 	if tree.get_last_condition():
@@ -143,10 +143,11 @@ func go_to_bed():
 	_update_target_location(bed_position_node.global_position)
 
 func _unhandled_input(event):
-	if Input.is_action_just_pressed("ui_accept"):
+#	if Input.is_action_just_pressed("ui_accept"):
 #		random_search_around()
-		tree.enabled = true
+#		tree.enabled = true
 #		random_attack()
+#		Signals.game_over.emit()
 	
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_MASK_RIGHT:
 		var camera = get_viewport().get_camera_3d() as Camera3D
