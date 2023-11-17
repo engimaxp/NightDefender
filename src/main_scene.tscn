@@ -5,20 +5,20 @@
 [ext_resource type="PackedScene" uid="uid://c0wbxf0lqxnfc" path="res://src/character/mosquetto.tscn" id="2_ogrxj"]
 [ext_resource type="PackedScene" uid="uid://1dc7plspbgg6" path="res://src/furniture/bear.tscn" id="3_3krvm"]
 [ext_resource type="PackedScene" uid="uid://co43njpavqant" path="res://src/furniture/bed_single.tscn" id="4_xr3yr"]
-[ext_resource type="PackedScene" uid="uid://8bg0kpcos5mo" path="res://asset/model/furniture/bookcaseClosed.glb" id="6_vnt0p"]
-[ext_resource type="PackedScene" uid="uid://uura7oe30l66" path="res://asset/model/furniture/cabinetTelevision.glb" id="7_dkd17"]
-[ext_resource type="PackedScene" uid="uid://ddcwyunf2mqvv" path="res://asset/model/furniture/pottedPlant.glb" id="8_s11m4"]
-[ext_resource type="PackedScene" uid="uid://v1lp6nebk2cu" path="res://asset/model/furniture/plantSmall3.glb" id="9_n4wpm"]
-[ext_resource type="PackedScene" uid="uid://1yopdbn3c54d" path="res://asset/model/furniture/plantSmall2.glb" id="10_biqj4"]
-[ext_resource type="PackedScene" uid="uid://cfseirvw0au6u" path="res://asset/model/furniture/plantSmall1.glb" id="11_jd7p8"]
-[ext_resource type="PackedScene" uid="uid://dlgwqvena724s" path="res://asset/model/furniture/rugRound.glb" id="12_41jjp"]
-[ext_resource type="PackedScene" uid="uid://c53anjeoovp5m" path="res://asset/model/furniture/televisionModern.glb" id="13_7uli6"]
-[ext_resource type="PackedScene" uid="uid://cl0cdmtqw7rbv" path="res://asset/model/furniture/lampWall.glb" id="14_su7i3"]
-[ext_resource type="PackedScene" uid="uid://b0yxthi6wcc2l" path="res://asset/model/furniture/doorway.glb" id="15_gc2vx"]
+[ext_resource type="PackedScene" uid="uid://b58fe6l63d8t4" path="res://src/furniture/bookcase_closed.tscn" id="6_xge13"]
+[ext_resource type="PackedScene" uid="uid://bohb25ogbr0r8" path="res://src/furniture/cabinet_television.tscn" id="7_g8x66"]
+[ext_resource type="PackedScene" uid="uid://n0tapeefyynw" path="res://src/furniture/potted_plant.tscn" id="8_4odhe"]
+[ext_resource type="PackedScene" uid="uid://de6x32x8rr66k" path="res://src/furniture/plant_small_3.tscn" id="9_juyjf"]
+[ext_resource type="PackedScene" uid="uid://pqkg0osi0270" path="res://src/furniture/plant_small_2.tscn" id="10_ck1xk"]
+[ext_resource type="PackedScene" uid="uid://cbas2yali5ksf" path="res://src/furniture/plant_small_1.tscn" id="11_x8sbh"]
+[ext_resource type="PackedScene" uid="uid://doojecf3ctw8b" path="res://src/furniture/rug_round.tscn" id="12_mbcxr"]
+[ext_resource type="PackedScene" uid="uid://c12pi06wbgt7m" path="res://src/furniture/television_modern.tscn" id="13_0soq2"]
+[ext_resource type="PackedScene" uid="uid://bhnuqcmwdqi7e" path="res://src/furniture/lamp_wall.tscn" id="14_ncow6"]
+[ext_resource type="PackedScene" uid="uid://b542r22vrtyhp" path="res://src/furniture/doorway.tscn" id="15_grk7r"]
+[ext_resource type="PackedScene" uid="uid://bs8i1uwqv3k27" path="res://src/furniture/desk_corner.tscn" id="16_jmbkk"]
 [ext_resource type="PackedScene" uid="uid://d2fjvcliy8dgd" path="res://src/furniture/computer_screen.tscn" id="16_ks7p4"]
-[ext_resource type="PackedScene" uid="uid://dojs471hfiuuu" path="res://asset/model/furniture/deskCorner.glb" id="16_s11tn"]
 [ext_resource type="PackedScene" uid="uid://56bq8sf2xqaq" path="res://src/vfx/vfx_layer.tscn" id="18_1e2wc"]
-[ext_resource type="PackedScene" uid="uid://codt0xov4h0iy" path="res://asset/model/furniture/chairDesk.glb" id="18_n15hn"]
+[ext_resource type="PackedScene" uid="uid://53b6dvjy1e8v" path="res://src/furniture/chair_desk.tscn" id="18_6kcpo"]
 [ext_resource type="PackedScene" uid="uid://barl4q1kugrmm" path="res://scenes/gameplay/pause-layer/pause-layer.tscn" id="20_2okcd"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sqm8b"]
@@ -144,55 +144,66 @@ transform = Transform3D(-1.09278e-07, 0, 2.5, 0, 2.5, 0, -2.5, 0, -1.09278e-07, 
 collision_layer = 5
 collision_mask = 5
 
-[node name="bookcaseClosed" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("6_vnt0p")]
+[node name="bookcaseClosed" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("6_xge13")]
 transform = Transform3D(-1.31134e-07, 0, 3, 0, 3, 0, -3, 0, -1.31134e-07, -2.67844, 0, 1.21707)
 
-[node name="cabinetTelevision" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("7_dkd17")]
+[node name="cabinetTelevision" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("7_g8x66")]
 transform = Transform3D(-1.09278e-07, 0, -2.5, 0, 2.5, 0, 2.5, 0, -1.09278e-07, 2.76402, 0, -3.4307)
+collision_layer = 5
+collision_mask = 5
 
-[node name="pottedPlant" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("8_s11m4")]
+[node name="pottedPlant2" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("8_4odhe")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -3.11251, -4.76837e-07, 1.73746)
 
-[node name="plantSmall3" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("9_n4wpm")]
+[node name="plantSmall3" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("9_juyjf")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 2.88859, 0.787741, -1.58491)
 
-[node name="plantSmall2" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("10_biqj4")]
+[node name="plantSmall2" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("10_ck1xk")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 2.95772, 0.972332, 2.54325)
 
-[node name="plantSmall1" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("11_jd7p8")]
+[node name="plantSmall1" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("11_x8sbh")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -3.24342, 2.55442, 0.576649)
 
-[node name="rugRound" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("12_41jjp")]
+[node name="rugRound2" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("12_mbcxr")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -0.0793209, 0, -0.924277)
 
-[node name="televisionModern" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("13_7uli6")]
+[node name="televisionModern" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("13_0soq2")]
 transform = Transform3D(-1.09278e-07, 0, -2.5, 0, 2.5, 0, 2.5, 0, -1.09278e-07, 3.19386, 0.750678, -2.51615)
 
-[node name="lampWall" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("14_su7i3")]
-transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -1, 2.63983, 3.03904)
-
-[node name="OmniLight3D" type="OmniLight3D" parent="Map/NavigationRegion3D/Furniture/lampWall"]
-visible = false
+[node name="OmniLight3D" type="OmniLight3D" parent="Map/NavigationRegion3D/Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 2.63983, 3.03904)
 layers = 7
 light_bake_mode = 1
 shadow_enabled = true
-omni_range = 10.0
+omni_range = 3.5
 omni_attenuation = 0.450625
 
-[node name="lampWall2" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("14_su7i3")]
-transform = Transform3D(-2.5, 0, -2.18557e-07, 0, 2.5, 0, 2.18557e-07, 0, -2.5, -1, 2.63983, -3.16485)
+[node name="OmniLight3D3" type="OmniLight3D" parent="Map/NavigationRegion3D/Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.99614, 0)
+layers = 7
+light_bake_mode = 1
+shadow_enabled = true
+omni_range = 4.0
+omni_attenuation = 0.5
 
-[node name="OmniLight3D" type="OmniLight3D" parent="Map/NavigationRegion3D/Furniture/lampWall2"]
+[node name="lampWall" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("14_ncow6")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -1, 2.63983, 3.03904)
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="Map/NavigationRegion3D/Furniture"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1, 2.63796, -3.24138)
 layers = 7
 light_bake_mode = 1
 shadow_enabled = true
 omni_range = 3.355
 omni_attenuation = 0.450625
 
-[node name="doorway" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("15_gc2vx")]
+[node name="lampWall3" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("14_ncow6")]
+transform = Transform3D(-2.5, 0, -2.18557e-07, 0, 2.5, 0, 2.18557e-07, 0, -2.5, -1, 2.63983, -3.16485)
+
+[node name="doorway" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("15_grk7r")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -0.669706, 0, 3.46552)
 
-[node name="deskCorner" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("16_s11tn")]
+[node name="deskCorner" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("16_jmbkk")]
 transform = Transform3D(-1.09278e-07, 0, -2.5, 0, 2.5, 0, 2.5, 0, -1.09278e-07, 1.12806, 0, 0.655431)
 
 [node name="computerScreen" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("16_ks7p4")]
@@ -200,7 +211,7 @@ transform = Transform3D(-2.5, 0, -2.18557e-07, 0, 2.5, 0, 2.18557e-07, 0, -2.5, 
 collision_layer = 5
 collision_mask = 5
 
-[node name="chairDesk" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("18_n15hn")]
+[node name="chairDesk2" parent="Map/NavigationRegion3D/Furniture" instance=ExtResource("18_6kcpo")]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 1.56631, 0, 1.85791)
 
 [node name="VFXLayer" parent="Map" instance=ExtResource("18_1e2wc")]

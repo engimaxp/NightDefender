@@ -201,6 +201,7 @@ func smoke_effect(is_true):
 func scale_up(d):
 	armature.scale += Vector3.ONE * 0.0005 * d
 	mesh_octahedron.scale += Vector3.ONE * 0.0005 * d
+	collision_shape_3d.scale += Vector3.ONE * 0.0005 * d
 	camera_controller.spring_arm_3d.spring_length += 0.002 * d
 @onready var mesh_octahedron = $SubViewport/LightDetection/MeshOctahedron
 @onready var collision_shape_3d = $CollisionShape3D
