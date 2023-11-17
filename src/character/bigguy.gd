@@ -30,16 +30,60 @@ var target_posiiton:Vector3
 
 var lerp_blend = 0.0
 signal arrive_destination
+@onready var status_mark = $StatusMark
+@onready var loop_tween = $LoopTween
+@onready var loop_tween2 = $LoopTween2
+@onready var status_label_2d = %StatusLabel2D
+@onready var sleep_mark = $SleepMark
 
 func _ready():
 	flash_light.hide()
 	spray.hide()
 	tennis_racket.hide()
+	status_mark.text = ""
+	sleep_mark.text = ""
+	status_label_2d.text = ""
 	if Constants.is_debug:
 		is_anoyed_by_player = true
 		is_ready_for_sleep = false
 	Signals.drink_blood_changed.connect(drink_blood_changed)
 	navigation_agent_3d.navigation_finished.connect(_arrive)
+
+func mark_display(mark):
+	if mark == "question":
+		status_mark.text = "?"
+		status_mark.modulate = Color(0.95, 0.95, 0.19, 1)
+		status_label_2d.text = status_mark.text
+		status_label_2d["theme_override_colors/font_color"] = status_mark.modulate
+	elif mark == "sleep":
+		loop_tween.start(sleep_mark,["text"],func(tween):
+			tween.tween_property(sleep_mark,"text","z",1.0)\
+				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			tween.tween_property(sleep_mark,"text","zz",1.0)\
+				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			tween.tween_property(sleep_mark,"text","zzZ",1.0)\
+				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		)
+		status_label_2d["theme_override_colors/font_color"] = Color.WHITE
+		loop_tween2.start(status_label_2d,["text"],func(tween):
+			tween.tween_property(status_label_2d,"text","z",1.0)\
+				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			tween.tween_property(status_label_2d,"text","zz",1.0)\
+				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			tween.tween_property(status_label_2d,"text","zzZ",1.0)\
+				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		)
+	elif mark == "alert":
+		status_mark.text = "!"
+		status_mark.modulate = Color.ORANGE_RED
+		status_label_2d.text = status_mark.text
+		status_label_2d["theme_override_colors/font_color"] = status_mark.modulate
+	else:# hide_mark
+		status_mark.text = ""
+		sleep_mark.text = ""
+		status_label_2d.text = ""
+		loop_tween.stop()
+		loop_tween2.stop()
 
 func drink_blood_changed(v):
 	if v > 5:
@@ -188,6 +232,7 @@ func _physics_process(delta):
 	move_and_slide()
 
 var is_tracing_target = false
+			
 var is_find_target = false
 
 func trace_target(is_true):

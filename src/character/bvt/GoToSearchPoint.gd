@@ -12,6 +12,7 @@ func tick(actor: Node, _blackboard: Blackboard) -> int:
 		var rp = path.curve.sample_baked(randf_range(0.0,curve_length))
 		if not a.arrive_destination.is_connected(arrive):
 			a.arrive_destination.connect(arrive)
+		a.mark_display("question")
 		a._update_target_location(rp)
 	if is_arrive:
 		clear_status(a)

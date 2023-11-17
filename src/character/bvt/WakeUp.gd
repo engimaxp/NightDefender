@@ -16,6 +16,7 @@ func tick(actor: Node, _blackboard: Blackboard) -> int:
 			if not is_wake_up:
 				is_wake_up = true
 				a.is_ready_for_sleep = false
+				a.mark_display("none")
 				var tween = create_tween()
 				tween.tween_property(a,"global_position",a.bed_position_node.position,1.5)
 			return RUNNING

@@ -37,6 +37,7 @@ func tick(actor: Node, _blackboard: Blackboard) -> int:
 			if anit.get("parameters/Transition/current_state") == "sleep":
 				a.current_state = Constants.BIGGUY_STATE.SLEEP
 				Signals.bigguy_sleep.emit()
+				a.mark_display("sleep")
 				clear_status(a)
 				return SUCCESS
 			else:

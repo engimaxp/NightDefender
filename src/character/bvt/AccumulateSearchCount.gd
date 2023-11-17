@@ -13,4 +13,5 @@ func tick(actor: Node, _blackboard: Blackboard) -> int:
 		_blackboard.set_value(Constants.BVT_SEARCH_TIME,Constants.BVT_SEARCH_TIME_INITIAL)
 		a.is_anoyed_by_player = false
 		a.is_ready_for_sleep = true
+		a.mark_display("hide")
 		return FAILURE

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://fi8s58bhwa8n"]
+
+[ext_resource type="Script" path="res://src/util/loop_tween.gd" id="1_fe6jn"]
+
+[node name="LoopTween" type="Node"]
+script = ExtResource("1_fe6jn")

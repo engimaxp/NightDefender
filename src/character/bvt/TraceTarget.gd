@@ -10,6 +10,7 @@ func tick(actor: Node, _blackboard: Blackboard) -> int:
 		is_start = true
 		if not a.arrive_destination.is_connected(arrive):
 			a.arrive_destination.connect(arrive)
+		a.mark_display("alert")
 		a.trace_target(true)
 	if is_arrive:
 		clear_status(a)
