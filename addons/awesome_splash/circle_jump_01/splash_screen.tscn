@@ -1,0 +1,111 @@
+[gd_scene load_steps=9 format=3 uid="uid://blig8ta1bmdbf"]
+
+[ext_resource type="Script" path="res://addons/awesome_splash/circle_jump_01/splash_screen.gd" id="1_mag6w"]
+[ext_resource type="PackedScene" uid="uid://bmdm8sbp5nqgd" path="res://addons/awesome_splash/core/AspectNode.tscn" id="2_mvuom"]
+[ext_resource type="Texture2D" uid="uid://cg4fnnfseiglp" path="res://addons/awesome_splash/circle_jump_01/logo.png" id="3_bchaw"]
+[ext_resource type="Script" path="res://addons/awesome_splash/text_node/AweListTextNode.gd" id="4_5ms8n"]
+[ext_resource type="FontFile" uid="uid://cnmrfe6f588ij" path="res://asset/font/HarmonyOS_Sans_SC_Black.ttf" id="5_womsh"]
+[ext_resource type="Script" path="res://addons/awesome_splash/text_node/AweTextNode.gd" id="6_g7njl"]
+
+[sub_resource type="Shader" id="1"]
+code = "shader_type canvas_item;
+
+void fragment() {
+    vec4 color = vec4(1.0, 1.0, 1.0, 1.0);
+	vec2 center = vec2(0.5, 0.5);
+	float r = (UV.x - center.x) * (UV.x - center.x) + (UV.y - center.y) * (UV.y - center.y);
+	if (r > 0.25) {
+		color.a = 0.0;
+	}
+    COLOR = color;
+}"
+
+[sub_resource type="ShaderMaterial" id="2"]
+shader = SubResource("1")
+
+[node name="SplashCircleJump01" type="Node2D"]
+script = ExtResource("1_mag6w")
+description = ""
+title_font_size = 92.0
+description_font_size = 32.0
+
+[node name="AspectNode" parent="." instance=ExtResource("2_mvuom")]
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="AspectNode"]
+
+[node name="LogoContainer" type="Control" parent="AspectNode/CanvasLayer2"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Circle" type="ColorRect" parent="AspectNode/CanvasLayer2/LogoContainer"]
+material = SubResource("2")
+custom_minimum_size = Vector2(256, 256)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Logo" type="TextureRect" parent="AspectNode/CanvasLayer2/LogoContainer"]
+custom_minimum_size = Vector2(384, 384)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -128.0
+offset_top = -128.0
+offset_right = 128.0
+offset_bottom = 128.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_bchaw")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TitleNode" type="Node2D" parent="AspectNode"]
+script = ExtResource("4_5ms8n")
+font = ExtResource("5_womsh")
+space_character = 48.0
+
+[node name="InfoNode" type="Node2D" parent="AspectNode"]
+modulate = Color(0.784314, 0.784314, 0.784314, 1)
+script = ExtResource("6_g7njl")
+font = ExtResource("5_womsh")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="CanvasLayer"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.290196, 1, 1, 1)
+
+[editable path="AspectNode"]

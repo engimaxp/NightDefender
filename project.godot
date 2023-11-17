@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="GameOffScale"
-run/main_scene="res://scenes/menu/menu.tscn"
+run/main_scene="res://src/util/splash_screen.tscn"
 config/features=PackedStringArray("4.1", "Mobile")
 boot_splash/show_image=false
 config/icon="res://icon.svg"
@@ -30,6 +30,10 @@ Game="*res://addons/ggt-core/game.gd"
 Transitions="*res://addons/ggt-core/transitions/transitions.tscn"
 Scenes="*res://addons/ggt-core/scenes/scenes.gd"
 Utils="*res://addons/ggt-core/utils/utils.gd"
+ScreenFade="*res://src/autoload/screen_fade.tscn"
+SoundManager="*res://addons/sound_manager/sound_manager.tscn"
+gd="*res://addons/godot-action/utils_gd_action.tscn"
+sp="*res://addons/awesome_splash/utils_splash.gd"
 
 [debug]
 
@@ -43,7 +47,7 @@ gdscript/warnings/unused_signal=0
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/ColorPreview/plugin.cfg", "res://addons/beehave/plugin.cfg", "res://addons/debug_menu/plugin.cfg", "res://addons/gdUnit4/plugin.cfg", "res://addons/ggt-core/plugin.cfg", "res://addons/ggt-debug-shortcuts/plugin.cfg", "res://addons/panku_console/plugin.cfg")
+enabled=PackedStringArray("res://addons/ColorPreview/plugin.cfg", "res://addons/awesome_splash/plugin.cfg", "res://addons/beehave/plugin.cfg", "res://addons/debug_menu/plugin.cfg", "res://addons/gdUnit4/plugin.cfg", "res://addons/ggt-core/plugin.cfg", "res://addons/ggt-debug-shortcuts/plugin.cfg", "res://addons/godot-action/plugin.cfg", "res://addons/panku_console/plugin.cfg", "res://addons/sound_manager/plugin.cfg")
 
 [input]
 

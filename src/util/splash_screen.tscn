@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://5pm6ndbhipf6"]
+
+[ext_resource type="Script" path="res://src/util/splash_screen.gd" id="1_2ramm"]
+[ext_resource type="PackedScene" uid="uid://blig8ta1bmdbf" path="res://addons/awesome_splash/circle_jump_01/splash_screen.tscn" id="2_xbghb"]
+[ext_resource type="Shader" path="res://addons/awesome_splash/assets/shader/transition.gdshader" id="3_347ad"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iwq4l"]
+shader = ExtResource("3_347ad")
+shader_parameter/transition_type = 0
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/diamond_size = 0.0
+shader_parameter/blur_intensity = 4.0
+shader_parameter/min_pixel = 1.0
+shader_parameter/max_pixel = 128.0
+shader_parameter/process_value = 0.0
+
+[node name="SplashContainer" type="Node2D"]
+script = ExtResource("1_2ramm")
+move_to_scene = "res://scenes/menu/menu.tscn"
+trainsition_type = 0
+
+[node name="SplashCircleJump01" parent="." instance=ExtResource("2_xbghb")]
+material = SubResource("ShaderMaterial_iwq4l")
+logo_path = "res://addons/awesome_splash/circle_jump_01/kestrel.png"
+title = "DunKestrel"

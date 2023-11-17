@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c2gocuhw2o7py"]
+[gd_scene load_steps=9 format=3 uid="uid://c2gocuhw2o7py"]
 
 [ext_resource type="Theme" uid="uid://ducfept6pmkkm" path="res://assets/ui-theme.tres" id="1"]
 [ext_resource type="Texture2D" uid="uid://bglkrj1s14hid" path="res://asset/2316.jpg" id="3_qksdv"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scenes/menu/game_version.gd" id="4_3hod2"]
 [ext_resource type="Script" path="res://scenes/menu/menu.gd" id="5"]
 [ext_resource type="Script" path="res://scenes/menu/godot_version.gd" id="5_fdyjp"]
+[ext_resource type="Texture2D" uid="uid://bbwxh0w1yyo7w" path="res://addons/awesome_splash/circle_jump_01/kestrel.png" id="7_ciuik"]
 [ext_resource type="Texture2D" uid="uid://djjjnfjfgjaxt" path="res://asset/mosquito.png" id="7_v2iol"]
 
 [node name="Menu" type="Control"]
@@ -102,24 +103,24 @@ grow_vertical = 0
 [node name="MadeByLabel" type="Label" parent="Credits"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-text = "made by:"
+text = "made by :  "
+horizontal_alignment = 2
 
-[node name="Developer1" type="Label" parent="Credits"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Credits"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Credits/HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("7_ciuik")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Developer1" type="Label" parent="Credits/HBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.92549, 0.92549, 0.92549, 1)
 text = "DunKestrel"
-
-[node name="Developer2" type="Label" parent="Credits"]
-visible = false
-layout_mode = 2
-theme_override_colors/font_color = Color(0.886275, 0.87451, 0.87451, 1)
-text = "Developer 2"
-
-[node name="Developer3" type="Label" parent="Credits"]
-visible = false
-layout_mode = 2
-theme_override_colors/font_color = Color(0.886275, 0.87451, 0.87451, 1)
-text = "Developer 3"
 
 [node name="TextureRect" type="TextureRect" parent="."]
 texture_filter = 2

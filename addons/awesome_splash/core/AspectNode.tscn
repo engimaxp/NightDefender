@@ -1,0 +1,41 @@
+[gd_scene load_steps=2 format=3 uid="uid://bmdm8sbp5nqgd"]
+
+[ext_resource type="Script" path="res://addons/awesome_splash/core/AspectNode.gd" id="1_hs3jb"]
+
+[node name="AspectNode" type="Node2D"]
+script = ExtResource("1_hs3jb")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="OutlineFrame" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Left" type="ColorRect" parent="CanvasLayer/OutlineFrame"]
+layout_mode = 0
+anchor_bottom = 1.0
+color = Color(0.352941, 1, 1, 1)
+
+[node name="Right" type="ColorRect" parent="CanvasLayer/OutlineFrame"]
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(1, 1, 0.25098, 1)
+
+[node name="Top" type="ColorRect" parent="CanvasLayer/OutlineFrame"]
+layout_mode = 0
+anchor_right = 1.0
+color = Color(1, 0.321569, 1, 1)
+
+[node name="Bottom" type="ColorRect" parent="CanvasLayer/OutlineFrame"]
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.27451, 0.25098, 1, 1)

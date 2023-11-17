@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3 uid="uid://bybxovx2blhvj"]
+
+[ext_resource type="Script" path="res://src/autoload/screen_fade.gd" id="1_522dx"]
+[ext_resource type="Shader" path="res://src/autoload/screen_fade.gdshader" id="2_ikymc"]
+[ext_resource type="Script" path="res://src/autoload/FadeSceneTexture.gd" id="2_o2mbm"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6wl3g"]
+shader = ExtResource("2_ikymc")
+shader_parameter/dissolve_amount = null
+
+[node name="ScreenFade" type="CanvasLayer"]
+script = ExtResource("1_522dx")
+
+[node name="FadeSceneTexture" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_6wl3g")
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_o2mbm")
