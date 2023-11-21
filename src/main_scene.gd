@@ -19,23 +19,24 @@ func _process(delta):
 
 func pre_start(params):
 	Signals.add_points.connect(score_change)
-	SoundManager.play_music(music)
 	var cur_scene: Node = get_tree().current_scene
 	print("Scene loaded: ", cur_scene.name, " (", cur_scene.scene_file_path, ")")
 	if params:
 		for key in params:
 			var val = params[key]
-			printt("", key, val)
+			print("", key, val)
 #	$Sprite2D.position = Game.size / 2
 
+func _ready():
+	Signals.bigguy_awake.connect(score_timer.start)
+	Signals.bigguy_sleep.connect(score_timer.stop)
+	Signals.game_over.connect(game_over)
 
 # `start()` is called after pre_start and after the graphic transition ends.
 func start():
 	print("gameplay.gd: start() called")
+	SoundManager.play_music(music)
 	Signals.scene_pre_start.emit()
-	Signals.bigguy_awake.connect(score_timer.start)
-	Signals.bigguy_sleep.connect(score_timer.stop)
-	Signals.game_over.connect(game_over)
 var is_game_over = false
 
 func game_over():

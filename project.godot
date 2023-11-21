@@ -24,15 +24,14 @@ BeehaveGlobalDebugger="*res://addons/beehave/debug/global_debugger.gd"
 Constants="*res://src/constants.gd"
 Signals="*res://src/signals.gd"
 DebugShortcuts="*res://addons/ggt-debug-shortcuts/autoload/debug_shortcuts.tscn"
+SoundManager="*res://addons/sound_manager/sound_manager.tscn"
 Game="*res://addons/ggt-core/game.gd"
 Transitions="*res://addons/ggt-core/transitions/transitions.tscn"
 Scenes="*res://addons/ggt-core/scenes/scenes.gd"
 Utils="*res://addons/ggt-core/utils/utils.gd"
 ScreenFade="*res://src/autoload/screen_fade.tscn"
-SoundManager="*res://addons/sound_manager/sound_manager.tscn"
 gd="*res://addons/godot-action/utils_gd_action.tscn"
 sp="*res://addons/awesome_splash/utils_splash.gd"
-Panku="*res://addons/panku_console/console.tscn"
 
 [debug]
 
@@ -46,7 +45,7 @@ gdscript/warnings/unused_signal=0
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/ColorPreview/plugin.cfg", "res://addons/awesome_splash/plugin.cfg", "res://addons/beehave/plugin.cfg", "res://addons/gdUnit4/plugin.cfg", "res://addons/ggt-core/plugin.cfg", "res://addons/ggt-debug-shortcuts/plugin.cfg", "res://addons/godot-action/plugin.cfg", "res://addons/panku_console/plugin.cfg", "res://addons/sound_manager/plugin.cfg")
+enabled=PackedStringArray("res://addons/ColorPreview/plugin.cfg", "res://addons/awesome_splash/plugin.cfg", "res://addons/beehave/plugin.cfg", "res://addons/gdUnit4/plugin.cfg", "res://addons/ggt-core/plugin.cfg", "res://addons/ggt-debug-shortcuts/plugin.cfg", "res://addons/godot-action/plugin.cfg", "res://addons/sound_manager/plugin.cfg")
 
 [input]
 

@@ -156,7 +156,10 @@ func detect_collide():
 			target_land_position = result.position
 			target_land_basis = hologram.global_transform.basis
 			is_on_big_guy = result.collider.is_in_group("big_guy_part")
-	hologram.visible = is_landable and not is_landed
+	if is_instance_valid(hologram):
+		hologram.visible = is_landable and not is_landed
+	else:
+		hologram = get_hologram()
 
 func get_normal_transform(p1:Vector3,pp:Vector3): # p1 normal pp need rotated axis
 	var angle = pp.angle_to(p1)

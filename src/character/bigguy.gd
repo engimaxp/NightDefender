@@ -142,10 +142,12 @@ func _clear_target_location():
 	navigation_agent_3d.target_position = Vector3.ZERO
 
 func go_to_bed():
+	flash_light.hide()
 	_update_target_location(bed_position_node.global_position)
 
 func _unhandled_input(event):
 #	if Input.is_action_just_pressed("ui_accept"):
+#		attack_with_grenade()
 #		random_search_around()
 #		tree.enabled = true
 #		random_attack()
@@ -203,7 +205,7 @@ func check_mosquetto_insight():
 	var a = get_mosqueto_from_array(head_aware.get_overlapping_bodies())
 	var b = get_mosqueto_from_array(ear_aware.get_overlapping_bodies())
 	var temp_flag = false
-	if direction.dot(dir) > 0.4 and direction.length() <= 4.0:
+	if direction.dot(dir) > 0.2 and direction.length() <= 6.0:
 		if mosquetto.current_light_value > light_level_cautious:
 			temp_flag = true
 	if a != null:
@@ -256,7 +258,7 @@ var is_find_target = false:
 		if is_find_target and diff: 
 #			print(tree.get_last_condition().name)
 			if current_state == Constants.BIGGUY_STATE.IDLE\
-			and tree.get_running_action().name == "SearchAroundRandom":
+			and tree.enabled and tree.get_running_action().name == "SearchAroundRandom":
 				print("tree.interupt()")
 				tree.interrupt()
 
@@ -300,15 +302,21 @@ func get_normal_transform(origin:Vector3,target:Vector3,pp:Vector3,t:Transform3D
 	return t.looking_at(target,(target - origin).cross(pp).normalized(),true).basis
 
 func random_attack():
-	if randf() < 0.5:
+	var r = randf()
+	if r < 0.3:
 		await attack_with_smoke()
+	elif r < 0.7:
+		await attack_with_grenade()
 	else:
 		await attack_with_bat()
 	return
 
 func attack_target():
-	if randf() < 0.1:
+	var r = randf()
+	if r < 0.3:
 		await attack_with_smoke(attack_target_position)
+	elif r < 0.7:
+		await attack_with_grenade()
 	else:
 		await attack_with_bat(attack_target_position)
 	return
@@ -332,6 +340,32 @@ func _bat_hit(p = null):
 		if b.is_in_group("mosquetto"):
 			b.hit_by_bat()
 
+@onready var grenade = %Grenade
+signal throw_complete
+
+func attack_with_grenade():
+	grenade.show()
+	grenade.start_emitting()
+	animation_tree.set("parameters/throw/request",AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+	await throw_complete
+	
+const GRENADE = preload("res://src/character/grenade.tscn")
+
+func throw_proj():
+	for i in 3:
+		var g = GRENADE.instantiate()
+		get_tree().current_scene.add_child(g)
+		g.timer_change(randf_range(2.0,3.0))
+		g.transform = grenade.global_transform
+		g.set_deferred("freeze",false)
+		g.start_emitting()
+		(g as RigidBody3D).apply_central_impulse(
+			global_transform.basis * Vector3.BACK * (randf() * 7.0)
+		)
+	grenade.hide()
+	grenade.stop_emitting()
+	throw_complete.emit()
+	
 func attack_with_smoke(p = null):
 	spray_times_current = 0
 	var bnt

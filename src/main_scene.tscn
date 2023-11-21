@@ -95,6 +95,7 @@ curve = SubResource("Curve3D_jrf04")
 
 [node name="big" parent="Map" node_paths=PackedStringArray("search_path") groups=["big"] instance=ExtResource("1_iu6fh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0134258, 0)
+light_level_cautious = 0.6
 bed_position_node_path = NodePath("../BedMark")
 on_bed_position_node_path = NodePath("../OnBedMark")
 search_path = NodePath("../Path3D")
