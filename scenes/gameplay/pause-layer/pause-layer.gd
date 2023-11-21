@@ -4,6 +4,7 @@ extends CanvasLayer
 @onready var pause_button := $PauseButton
 @onready var resume_option := $PauseOverlay/VBoxOptions/Resume
 
+@onready var hint = $Hint
 
 func _ready():
 	pause.hide()
@@ -29,6 +30,7 @@ func resume():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	get_tree().paused = false
 	pause.hide()
+	hint.hide()
 
 
 func pause_game():
@@ -36,6 +38,7 @@ func pause_game():
 	resume_option.grab_focus()
 	get_tree().paused = true
 	pause.show()
+	hint.show()
 
 
 func _on_Resume_pressed():

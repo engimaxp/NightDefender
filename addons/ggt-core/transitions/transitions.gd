@@ -36,10 +36,13 @@ func fade_in(params = {}):
 	if params and params.get("show_progress_bar") == true:
 		progress.show()
 	anim.play("transition-in")
+	hint.show()
+@onready var hint = $Hint
 
 
 # disappear
 func fade_out():
+	hint.hide()
 	if progress.visible and not progress.is_completed():
 		await self.progress_bar_filled
 	anim.connect(

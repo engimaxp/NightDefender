@@ -1,8 +1,21 @@
-[gd_scene load_steps=4 format=3 uid="uid://barl4q1kugrmm"]
+[gd_scene load_steps=14 format=3 uid="uid://barl4q1kugrmm"]
 
 [ext_resource type="Script" path="res://scenes/gameplay/pause-layer/pause-layer.gd" id="2"]
 [ext_resource type="Theme" uid="uid://ducfept6pmkkm" path="res://assets/ui-theme.tres" id="3"]
 [ext_resource type="Texture2D" uid="uid://byniue2cdd2yv" path="res://assets/pause_button.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://dnl7wo2m8or2t" path="res://asset/icon/A_Key_Light.png" id="4_f1xnl"]
+[ext_resource type="Texture2D" uid="uid://qecrjgaxlyjb" path="res://asset/icon/D_Key_Light.png" id="5_wbnek"]
+[ext_resource type="Texture2D" uid="uid://ceho6sjkcjqlj" path="res://asset/icon/E_Key_Light.png" id="6_7l6lg"]
+[ext_resource type="Texture2D" uid="uid://chmnouye4an6y" path="res://asset/icon/Mouse_Left_Key_Light.png" id="7_fqegf"]
+[ext_resource type="Texture2D" uid="uid://dtbkrvbvgrkye" path="res://asset/icon/Q_Key_Light.png" id="8_udj42"]
+[ext_resource type="Texture2D" uid="uid://c2rojh3bw7107" path="res://asset/icon/Space_Key_Light.png" id="9_80g6m"]
+[ext_resource type="Texture2D" uid="uid://mmdiy2ecu1qj" path="res://asset/icon/S_Key_Light.png" id="10_cbjvr"]
+[ext_resource type="Texture2D" uid="uid://o2h4oypay3mn" path="res://asset/icon/W_Key_Light.png" id="11_cp0ho"]
+[ext_resource type="FontFile" uid="uid://cnmrfe6f588ij" path="res://asset/font/HarmonyOS_Sans_SC_Black.ttf" id="12_audx3"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_4u6pr"]
+font = ExtResource("12_audx3")
+font_size = 48
 
 [node name="PauseLayer" type="CanvasLayer"]
 process_mode = 3
@@ -69,6 +82,72 @@ text = "RESUME"
 layout_mode = 2
 focus_mode = 2
 text = "MAIN MENU"
+
+[node name="Hint" type="Node2D" parent="."]
+
+[node name="AKeyLight" type="Sprite2D" parent="Hint"]
+position = Vector2(188, 466)
+texture = ExtResource("4_f1xnl")
+
+[node name="DKeyLight" type="Sprite2D" parent="Hint"]
+position = Vector2(381, 469)
+texture = ExtResource("5_wbnek")
+
+[node name="EKeyLight" type="Sprite2D" parent="Hint"]
+position = Vector2(414, 169)
+texture = ExtResource("6_7l6lg")
+
+[node name="MouseLeftKeyLight" type="Sprite2D" parent="Hint"]
+position = Vector2(850, 205)
+texture = ExtResource("7_fqegf")
+
+[node name="QKeyLight" type="Sprite2D" parent="Hint"]
+position = Vector2(222, 169)
+texture = ExtResource("8_udj42")
+
+[node name="SpaceKeyLight" type="Sprite2D" parent="Hint"]
+position = Vector2(840, 458)
+texture = ExtResource("9_80g6m")
+
+[node name="SKeyLight" type="Sprite2D" parent="Hint"]
+position = Vector2(284, 468)
+texture = ExtResource("10_cbjvr")
+
+[node name="WKeyLight" type="Sprite2D" parent="Hint"]
+position = Vector2(285, 384)
+texture = ExtResource("11_cp0ho")
+
+[node name="Label" type="Label" parent="Hint"]
+offset_left = 121.0
+offset_top = 58.0
+offset_right = 534.0
+offset_bottom = 118.0
+text = "Ascend / Descend"
+label_settings = SubResource("LabelSettings_4u6pr")
+
+[node name="Label2" type="Label" parent="Hint"]
+offset_left = 88.0
+offset_top = 519.0
+offset_right = 501.0
+offset_bottom = 579.0
+text = "Fly/Move Around"
+label_settings = SubResource("LabelSettings_4u6pr")
+
+[node name="Label3" type="Label" parent="Hint"]
+offset_left = 682.0
+offset_top = 502.0
+offset_right = 1095.0
+offset_bottom = 562.0
+text = "Land/TakeOff"
+label_settings = SubResource("LabelSettings_4u6pr")
+
+[node name="Label4" type="Label" parent="Hint"]
+offset_left = 718.0
+offset_top = 84.0
+offset_right = 1131.0
+offset_bottom = 144.0
+text = "Drink Blood"
+label_settings = SubResource("LabelSettings_4u6pr")
 
 [connection signal="pressed" from="PauseButton" to="." method="_on_PauseButton_pressed"]
 [connection signal="pressed" from="PauseOverlay/VBoxOptions/Resume" to="." method="_on_Resume_pressed"]
