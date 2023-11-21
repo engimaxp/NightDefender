@@ -132,7 +132,7 @@ func _process(delta):
 		action_label.text = "no running action"
 	
 func _attack():
-	animation_tree.set("parameters/attack/request",true)
+	animation_tree.set("parameters/attack/request",AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 	await get_tree().create_timer(2.0,false).timeout
 
 func _update_target_location(target):
@@ -202,14 +202,15 @@ func check_mosquetto_insight():
 #	DebugDraw3D.draw_arrow_ray(head.global_position,dir,0.4,Color.RED)
 	var a = get_mosqueto_from_array(head_aware.get_overlapping_bodies())
 	var b = get_mosqueto_from_array(ear_aware.get_overlapping_bodies())
-	is_find_target = false
+	var temp_flag = false
 	if direction.dot(dir) > 0.4 and direction.length() <= 4.0:
 		if mosquetto.current_light_value > light_level_cautious:
-			is_find_target = true
+			temp_flag = true
 	if a != null:
-		is_find_target = true
+		temp_flag = true
 	if b != null and b.is_in_air():
-		is_find_target = true
+		temp_flag = true
+	is_find_target = temp_flag
 	if is_find_target:
 		attack_target_position = mosquetto.global_position
 		var atp = Vector3(attack_target_position.x,global_position.y,attack_target_position.z)
@@ -248,10 +249,34 @@ func _physics_process(delta):
 
 var is_tracing_target = false
 			
-var is_find_target = false
+var is_find_target = false:
+	set(v):
+		var diff = is_find_target != v
+		is_find_target = v
+		if is_find_target and diff: 
+#			print(tree.get_last_condition().name)
+			if current_state == Constants.BIGGUY_STATE.IDLE\
+			and tree.get_running_action().name == "SearchAroundRandom":
+				print("tree.interupt()")
+				tree.interrupt()
 
 func trace_target(is_true):
 	is_tracing_target = is_true
+
+
+signal search_complete
+
+func fallback_search_around():
+	flash_light.hide()
+	if animation_tree.get("parameters/search/active"):
+		animation_tree.set("parameters/search/request",AnimationNodeOneShot.ONE_SHOT_REQUEST_ABORT)
+	search_complete.emit()
+	for ti in range(tween_registed.size() -1 ,-1,-1):
+		if tween_registed[ti] != null and (tween_registed[ti] as Tween).is_running():
+			(tween_registed[ti] as Tween).stop()
+			tween_registed.remove_at(ti)
+	
+var tween_registed = []
 
 func random_search_around():
 	flash_light.show()
@@ -259,20 +284,11 @@ func random_search_around():
 	var bnt = self.global_transform.looking_at(Vector3.FORWARD.rotated(Vector3.UP,randf() * 2.0 * PI))
 	var tween2 = create_tween()
 	tween2.tween_property(self,"global_transform",bnt,1.0)
+	tween_registed.append(tween2)
 	await tween2.finished
-#	await get_tree().process_frame
-	var candidate_points = get_face_direction_points_for_flash_lights(2.4,2.5,8)
-	candidate_points.shuffle()
-	var op = flash_light.global_position
-	var tween = create_tween()
-#	for random_point in candidate_points:
-	var random_point = candidate_points.pop_front()
-	var nb = get_normal_transform(op,random_point,flash_light.global_transform.basis.x,flash_light.global_transform)
-	tween.tween_property(flash_light,"global_transform",\
-		Transform3D(nb.rotated(-nb.y,PI / 2.0).orthonormalized(),op),1.0)
-	tween.tween_interval(1.0)
-	await tween.finished
-	flash_light.hide()
+	tween_registed.erase(tween2)
+	animation_tree.set("parameters/search/request",AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+	await search_complete
 	return
 	
 # pp global transform of axis object face direction
@@ -298,10 +314,12 @@ func attack_target():
 	return
 
 func attack_with_bat(p = null):
+	flash_light.hide()
 	tennis_racket.show()
 	_bat_hit(p)
 	await _attack()
 	tennis_racket.hide()
+	flash_light.show()
 	return
 
 func _bat_hit(p = null):
@@ -328,21 +346,21 @@ func attack_with_smoke(p = null):
 #	await get_tree().process_frame
 	var candidate_points = get_face_direction_points_for_flash_lights(2.4,2.5,2)
 	var op = spray.global_position
-	var tween = create_tween()
+	flash_light.hide()
+	spray.show()
+	animation_tree.set("parameters/search/request",AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 	var random_point = candidate_points[0]
 	var nb = get_normal_transform(op,random_point,spray.global_transform.basis.x,spray.global_transform)
 	start_spray_transform = nb
-	tween.tween_property(spray,"global_transform",\
-		Transform3D(nb.rotated(nb.y,PI).orthonormalized(),op),1.0)
-	tween.tween_callback(spray.show)
 	random_point = candidate_points[1]
 	nb = get_normal_transform(op,random_point,spray.global_transform.basis.x,spray.global_transform)
 	end_spray_transform = nb
-	tween.tween_property(spray,"global_transform",\
-		Transform3D(nb.rotated(nb.y,PI).orthonormalized(),op),5.0)
-	tween.parallel().tween_property(self,"smoke_attack_progress",1.0,5.0).from(0.0)
-	await tween.finished
+	var tween = create_tween()
+	tween.tween_interval(2.0)
+	tween.tween_property(self,"smoke_attack_progress",1.0,2.0).from(0.0)
+	await search_complete
 	spray.hide()
+	flash_light.show()
 	return
 
 const spray_times_total:int = 3

@@ -14,6 +14,9 @@ func tick(actor: Node, _blackboard: Blackboard) -> int:
 			a.arrive_destination.connect(arrive)
 		a.mark_display("question")
 		a._update_target_location(rp)
+	if a.is_find_target:
+		clear_status(a)
+		return FAILURE
 	if is_arrive:
 		clear_status(a)
 #		a._clear_target_location()

@@ -32,6 +32,7 @@ ScreenFade="*res://src/autoload/screen_fade.tscn"
 SoundManager="*res://addons/sound_manager/sound_manager.tscn"
 gd="*res://addons/godot-action/utils_gd_action.tscn"
 sp="*res://addons/awesome_splash/utils_splash.gd"
+Panku="*res://addons/panku_console/console.tscn"
 
 [debug]
 
@@ -45,7 +46,7 @@ gdscript/warnings/unused_signal=0
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/ColorPreview/plugin.cfg", "res://addons/awesome_splash/plugin.cfg", "res://addons/beehave/plugin.cfg", "res://addons/gdUnit4/plugin.cfg", "res://addons/ggt-core/plugin.cfg", "res://addons/ggt-debug-shortcuts/plugin.cfg", "res://addons/godot-action/plugin.cfg", "res://addons/sound_manager/plugin.cfg")
+enabled=PackedStringArray("res://addons/ColorPreview/plugin.cfg", "res://addons/awesome_splash/plugin.cfg", "res://addons/beehave/plugin.cfg", "res://addons/gdUnit4/plugin.cfg", "res://addons/ggt-core/plugin.cfg", "res://addons/ggt-debug-shortcuts/plugin.cfg", "res://addons/godot-action/plugin.cfg", "res://addons/panku_console/plugin.cfg", "res://addons/sound_manager/plugin.cfg")
 
 [input]
 

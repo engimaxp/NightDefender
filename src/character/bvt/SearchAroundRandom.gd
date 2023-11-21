@@ -26,6 +26,8 @@ func end(_p):
 		is_end = true
 
 func interrupt(actor: Node, blackboard: Blackboard) -> void:
+	var a = actor as BigGuy
+	a.fallback_search_around()
 	clear_status()
 
 func clear_status():
